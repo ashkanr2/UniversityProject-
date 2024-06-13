@@ -125,8 +125,8 @@ namespace UniversityProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Code"));
 
-                    b.Property<bool>("Description")
-                        .HasColumnType("bit");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Isdeleted")
                         .HasColumnType("bit");
@@ -135,14 +135,24 @@ namespace UniversityProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Code");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("UserRole");
+                });
+
+            modelBuilder.Entity("UserUserRole", b =>
+                {
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("rolesCode")
+                        .HasColumnType("int");
+
+                    b.HasKey("UsersId", "rolesCode");
+
+                    b.HasIndex("rolesCode");
+
+                    b.ToTable("UserUserRole");
                 });
 
             modelBuilder.Entity("UniversityProject.Entities.User", b =>
@@ -154,16 +164,19 @@ namespace UniversityProject.Migrations
                     b.Navigation("ProfileImage");
                 });
 
-            modelBuilder.Entity("UniversityProject.Entities.UserRole", b =>
+            modelBuilder.Entity("UserUserRole", b =>
                 {
                     b.HasOne("UniversityProject.Entities.User", null)
-                        .WithMany("roles")
-                        .HasForeignKey("UserId");
-                });
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("UniversityProject.Entities.User", b =>
-                {
-                    b.Navigation("roles");
+                    b.HasOne("UniversityProject.Entities.UserRole", null)
+                        .WithMany()
+                        .HasForeignKey("rolesCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

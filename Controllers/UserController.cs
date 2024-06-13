@@ -37,13 +37,13 @@ namespace UniversityProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Firstnam,Lastnam,Birthdate,CreatedOn,IssystemAdmin,ImageId,IsDeleted,IsModified")] User user)
         {
-            if (ModelState.IsValid)
-            {
+           
+             
                 await _userService.AddAsync(user);
                 return RedirectToAction(nameof(Index));
-            }
-            return View(user);
+            
         }
+
 
         public async Task<IActionResult> Edit(Guid id)
         {

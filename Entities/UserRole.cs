@@ -10,6 +10,7 @@ namespace UniversityProject.Entities
         public string Name { get; set; }
 
         public bool Isdeleted { get; set; }
-        public bool Description { get; set; }
+        public string? Description { get; set; }
+        public List<User> Users { get; set; }
     }
 }
