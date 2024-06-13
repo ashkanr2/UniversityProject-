@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using UniversityProject.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace UniversityProject.Infrastructures
 {
-    public class UniversityDBContext : DbContext
+    public class UniversityDBContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public UniversityDBContext()
         {

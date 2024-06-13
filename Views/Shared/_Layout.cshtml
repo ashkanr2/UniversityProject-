@@ -1,5 +1,9 @@
 ﻿<!doctype html>
 <html lang="en">
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UniversityProject.Entities.User> SignInManager
+
 
 <head>
     <meta charset="utf-8">
@@ -55,7 +59,18 @@
                             <li><a href="blog.html">Blog</a></li>
                             <li><a href="gallery.html">Gallery</a></li>
                             <li><a href="contact_us.html">Contact Us</a></li> *@
-
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                <span>  <a class="dropdown-item" asp-controller="Account" asp-action="Login" asp-area=""> @User.Identity.Name</a></span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                <a class="dropdown-item" asp-controller="Account" asp-action="Login" asp-area="">ورود</a>
+                                 </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
