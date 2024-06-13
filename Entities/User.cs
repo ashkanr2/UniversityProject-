@@ -8,8 +8,9 @@ namespace UniversityProject.Entities
 
             [Key]
             public Guid Id { get; set; }
-            public string Firstnam { get; set; }
-            public string Lastnam { get; set; }
+            public string Firstname { get; set; }
+            public string Lastname { get; set; }
+            public string Password { get; set; }  
 
             public DateTime Birthdate { get; set; }
             public DateTime CreatedOn { get; set; }
