@@ -5,32 +5,32 @@ using UniversityProject.Interfaces;
 
 namespace UniversityProject.Services
 {
-    public class LessonService : ILessonService
+    public class CourseService : ICourseService
     {
         private readonly UniversityDBContext _context;
 
-        public LessonService(UniversityDBContext context)
+        public CourseService(UniversityDBContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<Lesson>> GetAllAsync()
+        public async Task<IEnumerable<Course>> GetAllAsync()
         {
-            return await _context.Lessons.ToListAsync();
+            return await _context.Courses.Include(x=>x.Teacher).ToListAsync();
         }
 
-        public async Task<Lesson> GetByIdAsync(Guid id)
+        public async Task<Course> GetByIdAsync(Guid id)
         {
-            return await _context.Lessons.FindAsync(id);
+            return await _context.Courses.FindAsync(id);
         }
 
-        public async Task AddAsync(Lesson lesson)
+        public async Task AddAsync(Course lesson)
         {
-            _context.Lessons.Add(lesson);
+            _context.Courses.Add(lesson);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Lesson lesson)
+        public async Task UpdateAsync(Course lesson)
         {
             _context.Entry(lesson).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -38,10 +38,10 @@ namespace UniversityProject.Services
 
         public async Task DeleteAsync(Guid id)
         {
-            var lesson = await _context.Lessons.FindAsync(id);
+            var lesson = await _context.Courses.FindAsync(id);
             if (lesson != null)
             {
-                _context.Lessons.Remove(lesson);
+                _context.Courses.Remove(lesson);
                 await _context.SaveChangesAsync();
             }
         }

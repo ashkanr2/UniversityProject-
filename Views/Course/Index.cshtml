@@ -1,0 +1,52 @@
+﻿@model IEnumerable<UniversityProject.Entities.Course>
+
+<br />
+<br />
+<br />
+
+
+
+
+
+
+<!--  ************************* Page Title Starts Here ************************** -->
+<div class="page-nav no-margin row">
+    <div class="container">
+        <div class="row">
+            <h2>Cources</h2>
+            <ul>
+                <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><i class="fas fa-angle-double-right"></i> Cources</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ######## Page  Title End ####### -->
+<!-- ################# popular Cources Starts Here#######################--->
+<div class="popular-cources pc2">
+    <div class="container">
+
+        <div class="row courc-ro">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="courc-card">
+                        <img src="assets/images/cources/cource-1.jpg" alt="">
+                        <div class="cource-det">
+                            <h6>@item.Name</h6>
+                            <ul>
+                                <li><i class="fas fa-graduation-cap"></i> @item.Teacher.Name<span>Free</span></li>
+                                <li><i class="far fa-calendar-plus"></i> @item.CreatedOn</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+

@@ -9,6 +9,8 @@
 
         public string Name { get; set; }
 
+        public List <Course> Courses{ get; set; }
+
         public int  TeacherCode { get; set; }
 
         public bool IsDeleted { get; set; }

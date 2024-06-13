@@ -1,0 +1,13 @@
+﻿using UniversityProject.Entities;
+
+namespace UniversityProject.Interfaces
+{
+    public interface ICourseService
+    {
+        Task<IEnumerable<Course>> GetAllAsync();
+        Task<Course> GetByIdAsync(Guid id);
+        Task AddAsync(Course lesson);
+        Task UpdateAsync(Course lesson);
+        Task DeleteAsync(Guid id);
+    }
+}

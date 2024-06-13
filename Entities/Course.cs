@@ -3,7 +3,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace UniversityProject.Entities
 {
-    public class Lesson
+    public class Course
     {
         [Key]
         public Guid Id { get; set; }
@@ -13,6 +13,7 @@ namespace UniversityProject.Entities
         public  string Description { get; set; }
         public Guid TeacherId { get; set; }
         public Teacher Teacher { get; set; }
+        public decimal Cost { get; set; }
 
         public bool  IsDeleted { get; set; }
         public bool  IsActive { get; set; }

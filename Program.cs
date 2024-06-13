@@ -17,7 +17,7 @@ builder.Services.AddDbContext<UniversityDBContext>(options =>
 
 // Register your services
 builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<UserManager<User>>();

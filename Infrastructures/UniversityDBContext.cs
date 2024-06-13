@@ -21,7 +21,7 @@ namespace UniversityProject.Infrastructures
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> Roles { get; set; }
-        public virtual DbSet<Lesson> Lessons { get; set; }
+        public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
 

@@ -4,11 +4,11 @@ using UniversityProject.Interfaces;
 
 namespace UniversityProject.Controllers
 {
-    public class LessonController : Controller
+    public class CourseController : Controller
     {
-        private readonly ILessonService _lessonService;
+        private readonly ICourseService _lessonService;
 
-        public LessonController(ILessonService lessonService)
+        public CourseController(ICourseService lessonService)
         {
             _lessonService = lessonService;
         }
@@ -35,7 +35,7 @@ namespace UniversityProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn")] Lesson lesson)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn")] Course lesson)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace UniversityProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn")] Lesson lesson)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn")] Course lesson)
         {
             if (id != lesson.Id)
             {
