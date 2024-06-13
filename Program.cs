@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using UniversityProject.Interfaces;
 using UniversityProject.Services;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using UniversityProject.Infrastructures;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 // Register UniversityDBContext with the DI container
 builder.Services.AddDbContext<UniversityDBContext>(options =>
