@@ -1,24 +1,16 @@
 ﻿@model IEnumerable<UniversityProject.Entities.User>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 @{
     ViewData["Title"] = "Users";
 }
 
-
-<div class="our-blog"> 
+<div class="our-blog">
     <div class="container">
-
         <p>
             <a href="@Url.Action("Create")" class="btn btn-primary">Create New User</a>
         </p>
-        <br /> 
         <br />
-        <table class="table table-bordered table-hover ">
+        <br />
+        <table class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
                     <th>First Name</th>
@@ -35,15 +27,43 @@
                     <tr>
                         <td>@item.Firstname</td>
                         <td>@item.Lastname</td>
-                        <td>@item.Birthdate.ToShortDateString()</td>
-                        <td>@item.CreatedOn.ToShortDateString()</td>
+                        <td>@item.Birthdate.ToString("yyyy/MM/dd hh:mm tt")</td>
+                        <td>@item.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</td>
                         <td>@item.IssystemAdmin</td>
                         <td>
                             <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning btn-sm">Edit</a>
                             <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-info btn-sm">Details</a>
                             <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm">Delete</a>
+                            <!-- Button trigger modal -->
+                            @if(!item.IsTeacher){
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmActivationModal_@item.Id">
+                                    Activate Teacher
+                                </button>
+                            
+                                }
+                         
                         </td>
                     </tr>
+                    <!-- Modal -->
+                    <div class="modal fade" id="confirmActivationModal_@item.Id" tabindex="-1" role="dialog" aria-labelledby="confirmActivationModalLabel_@item.Id" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmActivationModalLabel_@item.Id">Activate Teacher</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to set  @item.Firstname @item.Lastname as a teacher?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <a href="@Url.Action("CreateTeacher", new { userId = item.Id })" class="btn btn-danger">Activate Teacher</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
             </tbody>
         </table>

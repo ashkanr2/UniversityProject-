@@ -34,8 +34,12 @@ namespace UniversityProject.Controllers
 
             if (user == null)
             {
-                // Log and handle user not found scenario
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                user =await _userManager.FindByNameAsync(model.UserName);
+                if (user == null)
+                {
+                    // Log and handle user not found scenario
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                }
                 return View(model);
             }
 
@@ -81,18 +85,26 @@ namespace UniversityProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(User model, string Password, CancellationToken cancellationToken)
         {
+            model.EmailConfirmed = true;
+            model.PhoneNumberConfirmed = true;
+            model.CreatedOn = DateTime.Now;
+            model.HelpPassword = Password;
 
-
-            model.EmailConfirmed=true;
-            model.PhoneNumberConfirmed=true;
-            model.CreatedOn=DateTime.Now;
-            model.HelpPassword=Password;
             var result = await _userManager.CreateAsync(model, Password);
-            ViewBag.Error = result.Errors.ToList().ToString();
 
-            return View(model);
-
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(model, "student");
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                // If there are errors, add them to ViewBag or ModelState as needed
+                ViewBag.Error = result.Errors.ToList().ToString();
+                return View(model); // Return to registration form with errors
+            }
         }
+
 
 
     }

@@ -44,8 +44,10 @@ namespace UniversityProject.Services
 
         public async Task AddAsync(Teacher teacher)
         {
+            int teacherCode = await TeacherCodeGenerator();
             try
             {
+                teacher.TeacherCode= teacherCode;
                 _context.Teachers.Add(teacher);
                 await _context.SaveChangesAsync();
             }
@@ -101,6 +103,15 @@ namespace UniversityProject.Services
                 Console.WriteLine($"An error occurred while getting teacher by USer Id: {ex.Message}");
                 return null;
             }
+        }
+        public async Task<int> TeacherCodeGenerator()
+        {
+           int result =  await _context.Teachers.MaxAsync(x => x.TeacherCode);
+            if (result == 0 || result ==  null)
+            {
+                return 1;
+            }
+            return result;
         }
     }
 }

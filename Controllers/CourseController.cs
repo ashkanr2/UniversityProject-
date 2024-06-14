@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 using UniversityProject.Entities;
 using UniversityProject.Interfaces;
 using UniversityProject.Models;
@@ -13,11 +15,20 @@ namespace UniversityProject.Controllers
         private readonly ICourseService _courseService;
         private readonly ITeacherService _teacherservice;
         private readonly SignInManager<User> _signInManager;
-        public CourseController(ICourseService lessonService, ITeacherService teacherservic, SignInManager<User> signInManager)
+        private readonly UserManager<User> _userManager;
+        private readonly IUserCourseService _userCourseService;
+        public CourseController(
+            ICourseService courseService,
+            UserManager<User> userManager,
+            ICourseService lessonService,
+            ITeacherService teacherservic, 
+            SignInManager<User> signInManager)
         {
             _courseService = lessonService;
             _teacherservice=teacherservic;
             _signInManager = signInManager;
+            _userManager = userManager;
+            _courseService=courseService;
         }
 
         public async Task<IActionResult> Index()
@@ -130,5 +141,34 @@ namespace UniversityProject.Controllers
 
            
         }
+        [HttpPost]
+        [Authorize(Roles = "STUDENT")] // Ensure only students can enroll
+        public async Task<IActionResult> AddToMyCourse(Guid courseId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            try
+            {
+                var enrollmentResult = await _userCourseService.AddCourseForUser(Guid.Parse(userId), courseId);
+                if (!enrollmentResult)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to enroll in the course.");
+                    // Redirect to course list or display an error message
+                }
+
+                return RedirectToAction("Index"); // Redirect to course list or display a success message
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                ModelState.AddModelError(string.Empty, "An error occurred while enrolling in the course.");
+                return RedirectToAction("Index"); // Redirect to course list or display an error message
+            }
+        }
     }
 }
+
