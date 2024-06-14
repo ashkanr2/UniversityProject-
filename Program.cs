@@ -24,7 +24,6 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddIdentity<User, IdentityRole<Guid>>(

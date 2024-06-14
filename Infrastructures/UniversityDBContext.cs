@@ -20,10 +20,9 @@ namespace UniversityProject.Infrastructures
 
 
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<UserRole> Roles { get; set; }
+
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Image> Images { get; set; }
-        public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -33,6 +32,12 @@ namespace UniversityProject.Infrastructures
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+             modelBuilder.Entity<UserCourse>()
+            .HasOne(uc => uc.course)
+            .WithMany(c => c.UserCourses)
+            .HasForeignKey(uc => uc.CourseId)
+            .OnDelete(DeleteBehavior.NoAction);
+
         }
 
 

@@ -12,8 +12,8 @@ using UniversityProject.Infrastructures;
 namespace UniversityProject.Migrations
 {
     [DbContext(typeof(UniversityDBContext))]
-    [Migration("20240613190456_addCost")]
-    partial class addCost
+    [Migration("20240614082753_NewData")]
+    partial class NewData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -249,7 +249,7 @@ namespace UniversityProject.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Teacher");
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("UniversityProject.Entities.User", b =>
@@ -279,6 +279,9 @@ namespace UniversityProject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Firstname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HelpPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -311,10 +314,6 @@ namespace UniversityProject.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -350,42 +349,25 @@ namespace UniversityProject.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("UniversityProject.Entities.UserRole", b =>
+            modelBuilder.Entity("UniversityProject.Entities.UserCourse", b =>
                 {
-                    b.Property<int>("Code")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Code"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Isdeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("UserRole");
-                });
-
-            modelBuilder.Entity("UserUserRole", b =>
-                {
-                    b.Property<Guid>("UsersId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("rolesCode")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UsersId", "rolesCode");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("rolesCode");
+                    b.HasKey("Id");
 
-                    b.ToTable("UserUserRole");
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCourse");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -470,24 +452,38 @@ namespace UniversityProject.Migrations
                     b.Navigation("ProfileImage");
                 });
 
-            modelBuilder.Entity("UserUserRole", b =>
+            modelBuilder.Entity("UniversityProject.Entities.UserCourse", b =>
                 {
-                    b.HasOne("UniversityProject.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
+                    b.HasOne("UniversityProject.Entities.Course", "course")
+                        .WithMany("UserCourses")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("UniversityProject.Entities.User", "user")
+                        .WithMany("UserCourses")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniversityProject.Entities.UserRole", null)
-                        .WithMany()
-                        .HasForeignKey("rolesCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("course");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("UniversityProject.Entities.Course", b =>
+                {
+                    b.Navigation("UserCourses");
                 });
 
             modelBuilder.Entity("UniversityProject.Entities.Teacher", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("UniversityProject.Entities.User", b =>
+                {
+                    b.Navigation("UserCourses");
                 });
 #pragma warning restore 612, 618
         }

@@ -19,7 +19,6 @@ namespace UniversityProject.Entities
             public Image? ProfileImage { get; set; }
             public bool IsDeleted { get; set; }
             public bool IsModified { get; set; }
-            public  List<UserRole> roles { get; set; }
-            //public List<Course>? courses { get; set; }
-        }
+        public ICollection<UserCourse> UserCourses { get; set; }
+    }
 }
