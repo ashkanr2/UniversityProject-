@@ -1,52 +1,35 @@
-﻿@model UniversityProject.Entities.User
+﻿@model LoginViewModel
  <br />
 <br />
 <br />
 <br />
 <br />
 <br />
-<form asp-controller="Account" asp-action="Login" method="POST" role="form" >
-    <div class="our-blog">
-        <div class="container">
-            <div class="session-title row">
-                <h2>Login</h2>
-            </div>
-            <div class="container">
+<form asp-action="Login" asp-controller="Account" method="post">
+    <form id="form" class="m-t-30 m-b-30" asp-controller="Account" asp-action="Login" method="POST" role="form">
+        <div class="form-group">
+            <label for="email" class="sr-only">رایانامه</label>
+            <div class="input-group round">
+                <span class="input-group-addon">
+                    <i class="icon-envelope"></i>
+                </span>
+                <input asp-for="UserName" class="form-control ltr text-left" type="email" required>
+            </div><!-- /.input-group -->
+        </div><!-- /.form-group -->
+        <div class="form-group">
+            <label for="password" class="sr-only">رمز عبور</label>
+            <div class="input-group round">
+                <span class="input-group-addon">
+                    <i class="icon-key"></i>
+                </span>
+                <input asp-for="Password" id="password" class="form-control ltr text-left" type="password" minlength="5" required>
+            </div><!-- /.input-group -->
+        </div><!-- /.form-group -->
+        <p>
+            <button class="btn btn-info btn-round btn-block" type="submit"> ورود </button>
 
-
-                <div class="container">
-                    <label for="UserName" Firstname</label>
-                    <div class="sec-2">
-                        <ion-icon name="UserName"></ion-icon>
-                        <input asp-for="UserName" type="text" name="UserName" placeholder="UserName" />
-                    </div>
-                </div>
-
-
-
-                <div class="container">
-                    <label for="Password" Firstname</label>
-                    <div class="sec-2">
-                        <ion-icon name="Password"></ion-icon>
-                        <input asp-for="Password" type="password" placeholder="password" />
-                    </div>
-                </div>
-
-
-
-                <br />
-                    <button class ="container" type="submit"> Login </button>
-                    <br />
-                    <div class="container">
-                    <span>   <a class="dropdown-item" asp-controller="Account" asp-action="Register" asp-area="">SignUp</a></span>
-                        <br />
-
-                        <span>Forgot Password?</span>
-                    </div>
-            </div>
-        </div>
-
-    </div>
+        </p>
+    </form>
 </form>
 
  

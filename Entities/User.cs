@@ -7,10 +7,10 @@ namespace UniversityProject.Entities
         {
 
             [Key]
-            public Guid Id { get; set; }
+            //public Guid Id { get; set; }
             public string Firstname { get; set; }
             public string Lastname { get; set; }
-            public string Password { get; set; }  
+            //public string HelpPassword { get; set; }  
 
             public DateTime Birthdate { get; set; }
             public DateTime CreatedOn { get; set; }
