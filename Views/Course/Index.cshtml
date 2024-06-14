@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<UniversityProject.Entities.Course>
 
+@{
+    ViewData["Title"] = "Courses";
+    var isAuthenticated = User.Identity.IsAuthenticated;
+}
 <br />
 <br />
 <br />
@@ -11,47 +15,54 @@
     </div>
 }
 
+
+
 <p>
-    <a href="@Url.Action("Create", "Course")" class="btn btn-primary">Create New Course</a>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Course</a>
 </p>
 <br />
 <br />
 
-<!-- Page Title Starts Here -->
+<!--  ************************* Page Title Starts Here ************************** -->
 <div class="page-nav no-margin row">
     <div class="container">
         <div class="row">
-            <h2>Courses</h2>
+            <h2>Cources</h2>
             <ul>
-                <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-                <li><i class="fas fa-angle-double-right"></i> Courses</li>
+                <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><i class="fas fa-angle-double-right"></i> Cources</li>
             </ul>
         </div>
     </div>
 </div>
-<!-- Page Title End -->
-<!-- Popular Courses Starts Here -->
-<div class="popular-courses pc2">
+
+<!-- ######## Page  Title End ####### -->
+<!-- ################# popular Cources Starts Here#######################--->
+<div class="popular-cources pc2">
     <div class="container">
-        <div class="row course-row">
+
+        <div class="row courc-ro">
+
             @foreach (var item in Model)
             {
                 <div class="col-md-4">
-                    <div class="course-card">
-                        <img src="assets/images/courses/course-1.jpg" alt="">
-                        <div class="course-details">
+                    <div class="courc-card">
+                        <img src="assets/images/cources/cource-1.jpg" alt="">
+                        <div class="cource-det">
                             <h6>@item.Name</h6>
                             <ul>
                                 <li><i class="fas fa-graduation-cap"></i> @item.Teacher.Name<span>@item.Cost</span></li>
                                 <li><i class="far fa-calendar-plus"></i> @item.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</li>
                             </ul>
-                            @if (User.IsInRole("STUDENT"))
+
+                            @if (isAuthenticated)
                             {
                                 <form action="@Url.Action("AddToMyCourse", "Course")" method="post">
                                     @Html.Hidden("courseId", item.Id)
-                                    <button type="submit" class="btn btn-primary">Add To My Course</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Add To My Course</button>
                                 </form>
                             }
+                            
                         </div>
                     </div>
                 </div>
@@ -59,3 +70,6 @@
         </div>
     </div>
 </div>
+
+
+

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using UniversityProject.Entities;
 using UniversityProject.Infrastructures;
 using UniversityProject.Interfaces;
@@ -24,10 +25,10 @@ namespace UniversityProject.Services
                 {
                     return false;
                 }
-                // Check if the user is already enrolled in the course
-                if (user.UserCourses.Any(uc => uc.CourseId == courseId))
+                var IsExist =await CourseIsExistForUser(userId , courseId);
+                if (IsExist)
                 {
-                    return true; // User is already enrolled
+                    return true; 
                 }
 
                 var userCourse = new UserCourse
@@ -45,6 +46,46 @@ namespace UniversityProject.Services
                 throw; // Rethrow the exception for the controller to handle
             }
         }
+
+        public async Task<bool> CourseIsExistForUser(Guid userId, Guid courseId)
+        {
+            try
+            {
+                var result =  _context.UserCourses.Any(x=>x.CourseId == courseId && x.UserId == userId);
+                
+                return result;
+            }
+            catch (Exception)
+            {
+                  
+                throw;
+               
+            }
+        }
+
+        public Task<IEnumerable<Course>> GetAllByUserId(Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Course>> GetAllCoursesByUserId(Guid userId)
+        {
+            try
+            {
+                var courses = await _context.UserCourses
+                    .Where(x => x.UserId == userId)
+                    .Select(x => x.course)
+                    .ToListAsync();
+
+                return courses;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching courses for user {userId}: {ex.Message}");
+                throw;
+            }
+        }
+
     }
 
 }

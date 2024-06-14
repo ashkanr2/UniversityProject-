@@ -22,13 +22,15 @@ namespace UniversityProject.Controllers
             UserManager<User> userManager,
             ICourseService lessonService,
             ITeacherService teacherservic, 
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            IUserCourseService userCourseService)
         {
             _courseService = lessonService;
             _teacherservice=teacherservic;
             _signInManager = signInManager;
             _userManager = userManager;
             _courseService=courseService;
+            _userCourseService = userCourseService;
         }
 
         public async Task<IActionResult> Index()
@@ -142,18 +144,12 @@ namespace UniversityProject.Controllers
            
         }
         [HttpPost]
-        [Authorize(Roles = "STUDENT")] // Ensure only students can enroll
         public async Task<IActionResult> AddToMyCourse(Guid courseId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
+            var user = await _signInManager.UserManager.GetUserAsync(User);
             try
             {
-                var enrollmentResult = await _userCourseService.AddCourseForUser(Guid.Parse(userId), courseId);
+                var enrollmentResult = await _userCourseService.AddCourseForUser(user.Id, courseId);
                 if (!enrollmentResult)
                 {
                     ModelState.AddModelError(string.Empty, "Failed to enroll in the course.");

@@ -26,6 +26,7 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<UserManager<User>>();
+builder.Services.AddScoped<IUserCourseService , UserCourseService>();
 builder.Services.AddIdentity<User, IdentityRole<Guid>>(
     Options =>
     {
