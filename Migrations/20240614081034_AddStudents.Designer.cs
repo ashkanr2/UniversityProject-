@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityProject.Infrastructures;
 
@@ -11,9 +12,11 @@ using UniversityProject.Infrastructures;
 namespace UniversityProject.Migrations
 {
     [DbContext(typeof(UniversityDBContext))]
-    partial class UniversityDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240614081034_AddStudents")]
+    partial class AddStudents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace UniversityProject.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CourseUser", b =>
+                {
+                    b.Property<Guid>("StudentsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("coursesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("StudentsId", "coursesId");
+
+                    b.HasIndex("coursesId");
+
+                    b.ToTable("CourseUser");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
@@ -382,6 +400,21 @@ namespace UniversityProject.Migrations
                     b.HasIndex("rolesCode");
 
                     b.ToTable("UserUserRole");
+                });
+
+            modelBuilder.Entity("CourseUser", b =>
+                {
+                    b.HasOne("UniversityProject.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniversityProject.Entities.Course", null)
+                        .WithMany()
+                        .HasForeignKey("coursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

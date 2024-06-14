@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityProject.Infrastructures;
 
@@ -11,9 +12,11 @@ using UniversityProject.Infrastructures;
 namespace UniversityProject.Migrations
 {
     [DbContext(typeof(UniversityDBContext))]
-    partial class UniversityDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240614080829_StudentCourses")]
+    partial class StudentCourses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,9 +185,14 @@ namespace UniversityProject.Migrations
                     b.Property<Guid>("TeacherId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TeacherId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Courses");
                 });
@@ -443,6 +451,10 @@ namespace UniversityProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("UniversityProject.Entities.User", null)
+                        .WithMany("courses")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Teacher");
                 });
 
@@ -484,6 +496,11 @@ namespace UniversityProject.Migrations
             modelBuilder.Entity("UniversityProject.Entities.Teacher", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("UniversityProject.Entities.User", b =>
+                {
+                    b.Navigation("courses");
                 });
 #pragma warning restore 612, 618
         }

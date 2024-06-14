@@ -10,7 +10,7 @@ namespace UniversityProject.Entities
             //public Guid Id { get; set; }
             public string Firstname { get; set; }
             public string Lastname { get; set; }
-            //public string HelpPassword { get; set; }  
+            public string HelpPassword { get; set; }  
 
             public DateTime Birthdate { get; set; }
             public DateTime CreatedOn { get; set; }
@@ -20,5 +20,6 @@ namespace UniversityProject.Entities
             public bool IsDeleted { get; set; }
             public bool IsModified { get; set; }
             public  List<UserRole> roles { get; set; }
+            //public List<Course>? courses { get; set; }
         }
 }

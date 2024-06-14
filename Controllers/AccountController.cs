@@ -86,7 +86,7 @@ namespace UniversityProject.Controllers
             model.EmailConfirmed=true;
             model.PhoneNumberConfirmed=true;
             model.CreatedOn=DateTime.Now;
-
+            model.HelpPassword=Password;
             var result = await _userManager.CreateAsync(model, Password);
             ViewBag.Error = result.Errors.ToList().ToString();
 
