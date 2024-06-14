@@ -113,5 +113,11 @@ namespace UniversityProject.Services
             }
             return result;
         }
+        public async Task<List<Teacher>> SearchTeachers(string query)
+        {
+            return await _context.Teachers
+                .Where(t => t.Name.Contains(query))
+                .ToListAsync();
+        }
     }
 }

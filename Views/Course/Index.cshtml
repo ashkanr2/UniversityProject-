@@ -51,7 +51,19 @@
                         <div class="cource-det">
                             <h6>@item.Name</h6>
                             <ul>
-                                <li><i class="fas fa-graduation-cap"></i> @item.Teacher.Name<span>@item.Cost</span></li>
+                                <li>
+                                    <i class="fas fa-graduation-cap"></i> @item.Teacher.Name
+                                    
+                                        @if (item.Cost == 0)
+                                        {
+                                        <span>Free</span>
+                                         }
+                                        else
+                                        {
+                                        <span>@item.Cost</span>
+                                        }
+                                    
+                                </li>
                                 <li><i class="far fa-calendar-plus"></i> @item.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</li>
                             </ul>
 
@@ -62,7 +74,7 @@
                                     <button type="submit" class="btn btn-sm btn-outline-secondary">Add To My Course</button>
                                 </form>
                             }
-                            
+
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using UniversityProject.Interfaces;
 using UniversityProject.Models;
 
 namespace UniversityProject.Controllers
@@ -9,10 +10,16 @@ namespace UniversityProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-            public HomeController(ILogger<HomeController> logger)
+        private readonly ICourseService _courseService;
+        private readonly ITeacherService _teacherService;
+        public HomeController(ILogger<HomeController> logger,
+            ICourseService courseService , 
+            ITeacherService teacherService
+            )
         {
             _logger = logger;
+            _courseService = courseService;
+            _teacherService = teacherService;
         }
 
         public IActionResult Index()
@@ -31,5 +38,21 @@ namespace UniversityProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public async Task<IActionResult> Search(string query)
+        {
+            if (string.IsNullOrEmpty(query) || query.Length < 3)
+            {
+                // Handle cases where the query is too short or empty
+                ViewBag.ErrorMessage = "Search query must be at least 3 characters long.";
+                return View("Index");
+            }
+
+            var courses = await _courseService.SearchCourses(query);
+
+            TempData["SearchResults"] = Newtonsoft.Json.JsonConvert.SerializeObject(courses);
+
+            return RedirectToAction("Index", "Course");
+        }
+
     }
 }

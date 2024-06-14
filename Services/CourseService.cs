@@ -103,5 +103,16 @@ namespace UniversityProject.Services
                 throw new Exception($"An error occurred while getting courses for the teacher with ID {id}.", ex);
             }
         }
+        public async Task<List<Course>> SearchCourses(string query)
+        {
+            // Search for courses where course name contains the query
+            var coursesQuery = _context.Courses
+                .Where(c => c.Name.Contains(query) || (c.Teacher != null && c.Teacher.Name.Contains(query)))
+                .ToListAsync();
+
+            return await coursesQuery;
+        }
+
+
     }
 }

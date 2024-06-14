@@ -35,8 +35,21 @@ namespace UniversityProject.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _courseService.GetAllAsync());
+            IEnumerable<Course> courses = null;
+            if (TempData["SearchResults"] != null)
+            {
+                var searchResultsJson = TempData["SearchResults"] as string;
+                courses = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Course>>(searchResultsJson);
+            }
+
+            if (courses == null)
+            {
+                courses = await _courseService.GetAllAsync();
+            }
+
+            return View(courses);
         }
+
 
         public async Task<IActionResult> Details(Guid id)
         {
@@ -75,14 +88,14 @@ namespace UniversityProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn")] Course lesson)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn,Cost")] Course course)
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
             var teacherId = (await _teacherservice.GetByIdUser(user.Id)).Id;
-            lesson.CreatedOn=DateTime.Now;
-            lesson.IsDeleted=false;
-            lesson.TeacherId=teacherId;
-            await _courseService.AddAsync(lesson);
+            course.CreatedOn=DateTime.Now;
+            course.IsDeleted=false;
+            course.TeacherId=teacherId;
+            await _courseService.AddAsync(course);
             return RedirectToAction(nameof(Index));
 
         }
@@ -136,11 +149,19 @@ namespace UniversityProject.Controllers
         public async Task<IActionResult> MyCourses()
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
-            var teacher = await _teacherservice.GetByIdUser(user.Id);
-            var courses =await _courseService.GetAllByTeacherId(teacher.Id);
-            if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
-            return View(courses);
-
+            if(user.IsTeacher)
+            {
+                var teacher = await _teacherservice.GetByIdUser(user.Id);
+                var courses = await _courseService.GetAllByTeacherId(teacher.Id);
+                if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
+                return View(courses);
+            }
+            else
+            {
+                var courses = await _userCourseService.GetAllByUserId(user.Id);
+                if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
+                return View(courses);
+            }
            
         }
         [HttpPost]
@@ -165,6 +186,7 @@ namespace UniversityProject.Controllers
                 return RedirectToAction("Index"); // Redirect to course list or display an error message
             }
         }
+        public int MyProperty { get; set; }
     }
 }
 

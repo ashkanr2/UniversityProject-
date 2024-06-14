@@ -1,9 +1,7 @@
 ﻿<!doctype html>
 <html lang="en">
 @using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Identity
 @inject SignInManager<UniversityProject.Entities.User> SignInManager
-
 
 <head>
     <meta charset="utf-8">
@@ -16,8 +14,6 @@
     <link rel="stylesheet" href="~/assets/plugins/slider/css/owl.carousel.min.css">
     <link rel="stylesheet" href="~/assets/plugins/slider/css/owl.theme.default.css">
     <link rel="stylesheet" type="text/css" href="~/assets/css/style.css" />
-  
-
 </head>
 
 <body>
@@ -43,7 +39,6 @@
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
         <div id="nav-head" class="header-nav">
@@ -64,14 +59,14 @@
                             @if (SignInManager.IsSignedIn(User))
                             {
                                 <li class="nav-item">
-                                <span>  <a class="dropdown-item" asp-controller="Account" asp-action="Login" asp-area=""> @User.Identity.Name</a></span>
+                                    <span>  <a class="dropdown-item" asp-controller="Account" asp-action="Login" asp-area=""> @User.Identity.Name</a></span>
                                 </li>
                             }
                             else
                             {
                                 <li class="nav-item">
-                                <a class="dropdown-item" asp-controller="Account" asp-action="Login" asp-area="">ورود</a>
-                                 </li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Login" asp-area="">ورود</a>
+                                </li>
                             }
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -85,19 +80,21 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Users</a>
                             </li>
-
+                            <li class="nav-item">
+                                <form class="form-inline my-2 my-lg-0 ml-auto" asp-controller="Home" asp-action="Search" method="get">
+                                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query">
+                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </header>
 
-
     <!-- ################# Slider Starts Here#######################--->
-   
+
     <br />
     <br />
     <br />
@@ -117,19 +114,10 @@
 
 
     <!-- ################# Key Features Starts Here#######################--->
-    
-
     <!-- ################# popular Cources Starts Here#######################--->
-  
     <!-- ################# University Number Starts Here#######################--->
-
-
     <!-- ################# Our Instructors Starts Here#######################--->
-
     <!-- ################# Our Blog Starts Here#######################--->
-
-
-  
     <!-- ################# Our Footer Starts Here#######################--->
 
 
