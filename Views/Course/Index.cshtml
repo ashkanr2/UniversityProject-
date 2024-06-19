@@ -4,9 +4,6 @@
     ViewData["Title"] = "Courses";
     var isAuthenticated = User.Identity.IsAuthenticated;
 }
-<br />
-<br />
-<br />
 
 @if (!ViewData.ModelState.IsValid)
 {
@@ -17,28 +14,50 @@
 
 
 
-<p>
-    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Course</a>
-</p>
-<br />
-<br />
 
-<!--  ************************* Page Title Starts Here ************************** -->
-<div class="page-nav no-margin row">
-    <div class="container">
-        <div class="row">
-            <h2>Cources</h2>
-            <ul>
-                <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
-                <li><i class="fas fa-angle-double-right"></i> Cources</li>
-            </ul>
-        </div>
-    </div>
-</div>
 
 <!-- ######## Page  Title End ####### -->
 <!-- ################# popular Cources Starts Here#######################--->
 <div class="popular-cources pc2">
+
+
+    <!--  ************************* Page Title Starts Here ************************** -->
+    <div class="page-nav no-margin row">
+        <div class="container">
+            <div class="row">
+                <h2>Cources</h2>
+                <ul>
+                    <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><i class="fas fa-angle-double-right"></i> Cources</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="our-blog">
+        <div class="container">
+            <p>
+                <a href="@Url.Action("Create")" class="btn btn-primary ">Create New Course</a>
+                <br />
+                <br />
+                <form asp-controller="Home" asp-action="Search" method="get">
+                    <div class="input-group">
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="query">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </div>
+                </form>
+            </p>
+        </div>
+
+        <br />
+        <br />
+
+    </div>
+
+
+
+
     <div class="container">
 
         <div class="row courc-ro">
@@ -53,16 +72,16 @@
                             <ul>
                                 <li>
                                     <i class="fas fa-graduation-cap"></i> @item.Teacher.Name
-                                    
-                                        @if (item.Cost == 0)
-                                        {
+
+                                    @if (item.Cost == 0)
+                                    {
                                         <span>Free</span>
-                                         }
-                                        else
-                                        {
+                                    }
+                                    else
+                                    {
                                         <span>@item.Cost</span>
-                                        }
-                                    
+                                    }
+
                                 </li>
                                 <li><i class="far fa-calendar-plus"></i> @item.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</li>
                             </ul>

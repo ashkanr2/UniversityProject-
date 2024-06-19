@@ -3,6 +3,21 @@
     ViewData["Title"] = "Users";
 }
 
+
+<!--  ************************* Page Title Starts Here ************************** -->
+<div class="page-nav no-margin row">
+    <div class="container">
+        <div class="row">
+            <h2>Users</h2>
+            <ul>
+                <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><i class="fas fa-angle-double-right"></i> Users</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
 <div class="our-blog">
     <div class="container">
         <p>
@@ -17,6 +32,7 @@
                     <th>Last Name</th>
                     <th>Birthdate</th>
                     <th>Created On</th>
+                    <th>Help Password</th>
                     <th>Is System Admin</th>
                     <th>Actions</th>
                 </tr>
@@ -29,6 +45,7 @@
                         <td>@item.Lastname</td>
                         <td>@item.Birthdate.ToString("yyyy/MM/dd hh:mm tt")</td>
                         <td>@item.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</td>
+                        <td>@item.HelpPassword</td>
                         <td>@item.IssystemAdmin</td>
                         <td>
                             <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning btn-sm">Edit</a>

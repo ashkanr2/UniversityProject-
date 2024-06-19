@@ -47,9 +47,9 @@ namespace UniversityProject.Controllers
                 return View("Index");
             }
 
-            var courses = await _courseService.SearchCourses(query);
+            var courseIds = (await _courseService.SearchCourses(query)).Select(c=>c.Id);
 
-            TempData["SearchResults"] = Newtonsoft.Json.JsonConvert.SerializeObject(courses);
+            TempData["SearchResults"] = Newtonsoft.Json.JsonConvert.SerializeObject(courseIds);
 
             return RedirectToAction("Index", "Course");
         }

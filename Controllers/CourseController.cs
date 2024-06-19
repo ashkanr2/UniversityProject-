@@ -40,6 +40,7 @@ namespace UniversityProject.Controllers
             {
                 var searchResultsJson = TempData["SearchResults"] as string;
                 courses = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Course>>(searchResultsJson);
+                TempData["SearchResults"] = null;
             }
 
             if (courses == null)
