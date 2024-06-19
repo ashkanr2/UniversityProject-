@@ -22,7 +22,12 @@ namespace UniversityProject.Controllers
         {
             return View(await _userService.GetAllAsync());
         }
-
+        public async Task<IActionResult> Edit()
+        {
+            var user = await _userService.GetAllAsync();
+            var x = user.FirstOrDefault();
+            return View(x);
+        }
         public async Task<IActionResult> CreateTeacher(Guid userId)
         {
             Teacher teacher = new Teacher();

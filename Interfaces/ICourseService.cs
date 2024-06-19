@@ -11,5 +11,6 @@ namespace UniversityProject.Interfaces
         Task AddAsync(Course lesson);
         Task UpdateAsync(Course lesson);
         Task DeleteAsync(Guid id);
+        
     }
 }

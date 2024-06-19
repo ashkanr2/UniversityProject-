@@ -1,38 +1,64 @@
 ﻿@model LoginViewModel
- <br />
 <br />
 <br />
 <br />
 <br />
 <br />
-<form asp-action="Login" asp-controller="Account" method="post">
-    <form id="form" class="m-t-30 m-b-30" asp-controller="Account" asp-action="Login" method="POST" role="form">
-        <div class="form-group">
-            <label for="email" class="sr-only">رایانامه</label>
-            <div class="input-group round">
-                <span class="input-group-addon">
-                    <i class="icon-envelope"></i>
-                </span>
-                <input asp-for="UserName" class="form-control ltr text-left" type="text" required>
-            </div><!-- /.input-group -->
-        </div><!-- /.form-group -->
-        <div class="form-group">
-            <label for="password" class="sr-only">رمز عبور</label>
-            <div class="input-group round">
-                <span class="input-group-addon">
-                    <i class="icon-key"></i>
-                </span>
-                <input asp-for="Password" id="password" class="form-control ltr text-left" type="password" minlength="5" required>
-            </div><!-- /.input-group -->
-        </div><!-- /.form-group -->
-        <p>
-            <button class="btn btn-info btn-round btn-block" type="submit"> ورود </button>
+<br />
+<div class="row">
+    <div class="col-lg-6 col-md-10 m-auto m-b-30">
+        <div class="text-center">
+            <div class="user-box">
+                @{
+                    if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.Error
+                        </div>
+                    }
+                    if (ViewBag.register != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @ViewBag.register
+                        </div>
+                    }
 
-        </p>
-    </form>
-</form>
+                    
+                }
+                <form asp-action="Login" asp-controller="Account" method="post" class="col-sm-6">
+                    <div id="form" class="m-t-30 m-b-30" asp-controller="Account" asp-action="Login" method="POST" role="form">
+                        <div class="form-group">
+                            <div class="input-group round">
+                                <span class="input-group-addon">
+                                    <i class="icon-envelope"></i>
+                                </span>
+                                <input asp-for="UserName" class="form-control ltr text-left" type="text" required placeholder="Email@Email.com">
+                            </div><!-- /.input-group -->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                            <div class="input-group round">
+                                <span class="input-group-addon">
+                                    <i class="icon-key"></i>
+                                </span>
+                                <input asp-for="Password" id="password" class="form-control ltr text-left" type="password" minlength="5" required placeholder="Password">
+                            </div><!-- /.input-group -->
+                        </div><!-- /.form-group -->   <br />
+                        <button style="background-color: green; color: white;" class="btn btn-round btn-block col-sm-6" type="submit">Login</button>
 
- 
+                    </div>
+
+                    <br />
+                    
+                </form>
+                <div class="btn-round btn-block col-sm-6">
+                    <a class="btn btn-info btn-round btn-block col-sm-6" asp-controller="Account" asp-action="register" asp-area="" style="">Register</a>
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
 @* <meta charset="UTF-8">
 <link rel="stylesheet" href="~/style22.css">
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

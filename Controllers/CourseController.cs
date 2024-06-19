@@ -33,16 +33,22 @@ namespace UniversityProject.Controllers
             _userCourseService = userCourseService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string query=null)
         {
             IEnumerable<Course> courses = null;
-            if (TempData["SearchResults"] != null)
+            if (!string.IsNullOrEmpty(query) && query.Length < 3)
             {
-                var searchResultsJson = TempData["SearchResults"] as string;
-                courses = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Course>>(searchResultsJson);
-                TempData["SearchResults"] = null;
+                // Handle cases where the query is too short or empty
+                ViewBag.ErrorMessage = "Search query must be at least 3 characters long.";
+                return View();
             }
+            if (query != null && query.Length>=3) 
+            {
+                courses = (await _courseService.SearchCourses(query));
+                ViewBag.ErrorMessage = "Search Courses  Like "+query;
 
+            }
+           
             if (courses == null)
             {
                 courses = await _courseService.GetAllAsync();

@@ -1,5 +1,5 @@
 ﻿@model UniversityProject.Entities.User
-
+ 
 <br />
 <br />
 <br />
@@ -14,80 +14,89 @@
     }
 }
 
-
 <br />
-<form asp-controller="Account" asp-action="Register" method="POST" role="form">
-    <div class="our-blog">
-        <div class="container">
-            <div class="session-title row">
-                <h2>Login</h2>
-            </div>
-            <div class="container">
 
-                <div class="container">
-                    <label for="Firstname" Firstname</label>
-                    <div class="sec-2">
-                        <ion-icon name="Firstname"></ion-icon>
-                        <input asp-for="Firstname" type="text"  placeholder="Firstname" />
+
+<div class="row">
+    <div class="col-lg-6 col-md-10 m-auto m-b-30">
+        <div class="text-center">
+            <div class="user-box">
+                @{
+                    if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.Error
+                        </div>
+                    }
+                }
+                <form asp-action="Register" asp-controller="Account" method="post" class="col-sm-6">
+                    <div id="form" class="m-t-30 m-b-30" asp-controller="Account" asp-action="Login" method="POST" role="form">
+                        <div class="form-group">
+                            <div class="input-group round">
+                                <span class="input-group-addon">
+                                    <i class="icon-envelope"></i>
+                                </span>
+                                <input asp-for="@Model.Email" class="form-control ltr text-left" type="email" required placeholder="Email@Email.com">
+                            </div><!-- /.input-group -->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                            <div class="input-group round">
+                                <span class="input-group-addon">
+                                    <i class="icon-envelope"></i>
+                                </span>
+                                <input asp-for="@Model.UserName" class="form-control ltr text-left" type="text" required placeholder="UserName">
+                            </div><!-- /.input-group -->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                            <div class="input-group round">
+                                <span class="input-group-addon">
+                                    <i class="icon-envelope"></i>
+                                </span>
+                                <input name="Password" class="form-control ltr text-left" type="password" required placeholder="Password" />
+
+                            </div><!-- /.input-group -->
+                        </div><!-- /.form-group -->
+
+                        <div class="form-group">
+                            <div class="input-group round">
+                                <span class="input-group-addon">
+                                    <i class="icon-envelope"></i>
+                                </span>
+                                <input asp-for="@Model.Firstname" class="form-control ltr text-left" type="text" required placeholder="First Name">
+                            </div><!-- /.input-group -->
+                        </div><!-- /.form-group -->
+
+                        <div class="form-group">
+                            <div class="input-group round">
+                                <span class="input-group-addon">
+                                    <i class="icon-envelope"></i>
+                                </span>
+                                <input asp-for="@Model.Lastname" class="form-control ltr text-left" type="text" required placeholder="Last Name">
+                            </div><!-- /.input-group -->
+                        </div><!-- /.form-group -->
+
+
+
+                        
+                        <button style="background-color: green; color: white;" class="btn btn-round btn-block col-sm-6" type="submit">Register</button>
+
                     </div>
-                </div>
 
-                <div class="container">
-                    <label for="Lastname" Firstname</label>
-                    <div class="sec-2">
-                        <ion-icon name="Lastname"></ion-icon>
-                        <input asp-for="Lastname" type="text"  placeholder="Lastname" />
-                    </div>
-                </div>
-                <div class="container">
-                    <label for="Email" Firstname</label>
-                    <div class="sec-2">
-                        <ion-icon name="Email"></ion-icon>
-                        <input asp-for="Email" type="email"  placeholder="Email" />
-                    </div>
-                </div>
-
-                <div class="container">
-
-                    <div class="sec-2">
-                        <ion-icon name="Password"></ion-icon>
-                        <input name="Password" class="form-control" />
-                      
-                    </div>
-
-                </div>
-                <div class="container">
-                    <label for="UserName" Firstname</label>
-                    <div class="sec-2">
-                        <ion-icon name="UserName"></ion-icon>
-                        <input asp-for="UserName" type="text" name="UserName" placeholder="UserName" />
-                    </div>
-                </div>
-
-              
-
-
-
-
-
-
-
-
-                <br />
-                <button class="container" type="submit"> Login </button>
-                <br />
-                <div class="container">
-                    <span>Signup</span>
                     <br />
 
-                    <span>Forgot Password?</span>
+                </form>
+                <div class="btn-round btn-block col-sm-6">
+                    <a class="btn btn-info btn-round btn-block col-sm-6" asp-controller="Account" asp-action="Login" asp-area="" style="">Login</a>
+
                 </div>
+
             </div>
         </div>
-
     </div>
-</form>
-
+</div>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
 @* <meta charset="UTF-8">
 <link rel="stylesheet" href="~/style22.css">

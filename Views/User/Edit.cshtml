@@ -1,0 +1,185 @@
+﻿@model   UniversityProject.Entities.User
+@{
+    ViewData["Title"] = "Edit User";
+
+}
+
+<div class="page-nav no-margin row">
+    <div class="container">
+        <div class="row">
+            <h2>Users</h2>
+            <ul>
+                <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><i class="fas fa-angle-double-right"></i> Users</li>
+                <li style="color: green;"><i class="fas fa-angle-double-right"></i>@Model.UserName</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="portlet-body edit-form">
+  @*   @if(Model.IsCreated == false){
+        <div class="alert alert-warning fill curve text-center">
+        <i class="icon-bell"></i>
+            مدارک احراز هویت شما در حال بررسی می باشد. لطفا تا تایید مدیریت صبور باشید.
+    </div>
+    } *@
+
+    <div class="row">
+        <div class="col-lg-6 col-md-10 m-auto m-b-30">
+            <div class="text-center">
+                <div class="user-box">
+                    
+                    <div class="user-details">
+                        
+                        <div class="dropdown user-login">
+                            
+                            <ul class="dropdown-menu dropdown-status">
+                                <li>
+                                    <a href="#" class="busy">
+                                        <i class="fas fa-circle text-success"></i>
+                                        <span>دردسترس</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="busy">
+                                        <i class="fas fa-circle text-danger"></i>
+                                        <span>مشغول</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fas fa-circle text-gray"></i>
+                                        <span>مخفی</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fas fa-circle text-warning"></i>
+                                        <span>سایر</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group relative mt-3 mb-4">
+                <input type="file" class="form-control"> 
+                <div class="input-group round"> 
+                    <input type="text" class="form-control file-input" placeholder="برای آپلود کلیک کنید"> 
+                    <span class="input-group-btn input-group-sm"> 
+                        <button type="button" class="btn btn-info"> 
+                            <i class="icon-picture"></i>
+                            آپلود عکس
+                        </button>
+                    </span> 
+                </div>
+                <div class="help-block"></div>
+            </div>
+            <hr>
+            <form id="form" role="form" method="POST" asp-action="Edit" asp-controller="User">
+                <div class="form-body">
+                    <div style="display: none;">
+                         @* <input value="@Model.Id" asp-for="Id" /> *@
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="txt-firstname">نام</label>
+                                <div class="input-group round">
+                                    <span class="input-group-addon">
+                                        <i class="icon-user"></i>
+                                    </span>
+                                    @* <input type="text" id="txt-firstname"  class="form-control"placeholder="@Model.Name" asp-for="Name" > *@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="txt-lastname">نام خانوادگی</label>
+                                <div class="input-group round">
+                                    <span class="input-group-addon">
+                                        <i class="icon-user"></i>
+                                    </span>
+                                    @* <input type="text" id="txt-lastname"  class="form-control"placeholder="@Model.LastName" asp-for="LastName"> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txt-mobile">موبایل</label>
+                        <div class="input-group round">
+                            <span class="input-group-addon">
+                                <i class="icon-screen-smartphone"></i>
+                            </span>
+                            <input type="text" id="txt-mobile" name="mobile" class="form-control ltr text-left mobile">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txt-email">ایمیل</label>
+                        <div class="input-group round">
+                            <span class="input-group-addon">
+                                <i class="icon-envelope"></i>
+                            </span>
+                            <input type="email" id="txt-email"  class="form-control ltr text-left"placeholder="@Model.Email" asp-for="Email">
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="slc-province">استان</label>
+                                <select id="slc-province" class="form-control select2 round">
+                                    <option>تهران</option>
+                                    <option>فارس</option>
+                                    <option>اصفهان</option>
+                                    <option>خراسان</option>
+                                    <option>یزد</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="slc-city">شهر</label>
+                                <select id="slc-city" class="form-control select2 round">
+                                    <option>تهران</option>
+                                    <option>ورامین</option>
+                                    <option>پرند</option>
+                                    <option>پردیس</option>
+                                    <option>ری</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>نشانی</label>
+                        <div class="input-group round">
+                            <span class="input-group-addon">
+                                <i class="icon-location-pin"></i>
+                            </span>
+                            @* <textarea class="form-control" rows="4" placeholder="نشانی"placeholder="@Model.Address" asp-for="Address"></textarea> *@
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-info btn-round">
+                        <i class="icon-check"></i>
+                        ذخیره
+                    </button>
+                    <a href="#" class="btn btn-warning btn-round pull-left">
+                        <i class="icon-close"></i>
+                        بازگشت
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -15,7 +15,6 @@
 
 
 
-
 <!-- ######## Page  Title End ####### -->
 <!-- ################# popular Cources Starts Here#######################--->
 <div class="popular-cources pc2">
@@ -29,6 +28,12 @@
                 <ul>
                     <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
                     <li><i class="fas fa-angle-double-right"></i> Cources</li>
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                    {
+                        <li style="color: green;"><i class="fas fa-angle-double-right"></i> @ViewBag.ErrorMessage</li>
+                        
+                    }
+
                 </ul>
             </div>
         </div>
@@ -41,9 +46,18 @@
                 <a href="@Url.Action("Create")" class="btn btn-primary ">Create New Course</a>
                 <br />
                 <br />
-                <form asp-controller="Home" asp-action="Search" method="get">
+                <form asp-controller="Course" asp-action="Index" method="get">
                     <div class="input-group">
+                        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                        {
+                            <input class="form-control" type="search" placeholder="@ViewBag.ErrorMessage" aria-label="Search" name="query">
+
+                        }
+                        @if (string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                        {
                         <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="query">
+                        }
+                       
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </div>
                 </form>

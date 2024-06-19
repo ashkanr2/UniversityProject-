@@ -38,7 +38,8 @@ namespace UniversityProject.Controllers
                 if (user == null)
                 {
                     // Log and handle user not found scenario
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                   
+                    ViewBag.Error =  "Invalid login attempt.";
                 }
                 return View(model);
             }
@@ -88,14 +89,17 @@ namespace UniversityProject.Controllers
             model.EmailConfirmed = true;
             model.PhoneNumberConfirmed = true;
             model.CreatedOn = DateTime.Now;
+            model.Birthdate= DateTime.Now;
             model.HelpPassword = Password;
+            model.IsModified = true;
 
             var result = await _userManager.CreateAsync(model, Password);
 
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(model, "student");
-                return RedirectToAction("Index", "Home");
+                ViewBag.register = "Register Success";
+                return RedirectToAction("Login", "Account");
             }
             else
             {

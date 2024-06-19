@@ -36,7 +36,7 @@ namespace UniversityProject.Services
         {
             try
             {
-                return await _context.Courses.FindAsync(id);
+                return await _context.Courses.Include(x => x.Teacher).FirstOrDefaultAsync(x=>x.Id ==  id);
             }
             catch (Exception ex)
             {
@@ -107,6 +107,7 @@ namespace UniversityProject.Services
         {
             // Search for courses where course name contains the query
             var coursesQuery = _context.Courses
+               .Include(x => x.Teacher)
                 .Where(c => c.Name.Contains(query) || (c.Teacher != null && c.Teacher.Name.Contains(query)))
                 .ToListAsync();
 
