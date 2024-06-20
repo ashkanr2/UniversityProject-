@@ -123,9 +123,10 @@ namespace UniversityProject.Controllers
                 }
             }
 
-
+            course.Name=addCourseVM.Name;
             course.TeacherId=teacherId;
             course.IsActive=addCourseVM.IsActive;
+            course.Description=addCourseVM.Description;
             await _courseService.AddAsync(course);
             return RedirectToAction(nameof(Index));
 
