@@ -12,7 +12,9 @@ namespace UniversityProject.Entities
 
         public bool IsModified { get; set; }
         public DateTime CreatedOn { get; set; }
-        
 
+        public Guid ImageTypeId { get; set; }
+        public ImageType ImageType { get; set; }
+        public List<Course> Courses { get; set; }
     }
 }

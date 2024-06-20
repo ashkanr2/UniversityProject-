@@ -25,6 +25,7 @@ namespace UniversityProject.Infrastructures
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<UserCourse> UserCourses { get; set; }
+        public virtual DbSet<ImageType> ImageType { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -38,6 +39,13 @@ namespace UniversityProject.Infrastructures
             .WithMany(c => c.UserCourses)
             .HasForeignKey(uc => uc.CourseId)
             .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Course>()
+           .HasOne(c => c.Image)
+           .WithMany()
+           .HasForeignKey(c => c.ImageId)
+           .OnDelete(DeleteBehavior.SetNull); // Specify that the foreign key can be null
+
 
         }
 

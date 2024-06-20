@@ -44,14 +44,14 @@ namespace UniversityProject.Controllers
             }
             if (query != null && query.Length>=3) 
             {
-                courses = (await _courseService.SearchCourses(query));
+                courses = (await _courseService.SearchCourses(query)).OrderBy(c => c.CreatedOn);
                 ViewBag.ErrorMessage = "Search Courses  Like "+query;
 
             }
            
             if (courses == null)
             {
-                courses = await _courseService.GetAllAsync();
+                courses = (await _courseService.GetAllAsync()).OrderBy(c=>c.CreatedOn);
             }
 
             return View(courses);

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using UniversityProject.Entities;
 using UniversityProject.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UniversityProject.Controllers
 {
@@ -15,18 +14,25 @@ namespace UniversityProject.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
         public async Task<IActionResult> Login()
         {
-            await _signInManager.SignOutAsync();
-            return View();
+            if (_signInManager.IsSignedIn(User))
+            {
+                await _signInManager.SignOutAsync();
+                return RedirectToAction("Login");
+            }
+           return View();
+           
         }
+
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (model == null || string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
             {
-                // Log and handle invalid model state
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                TempData["AlertMessage"] = "Invalid login attempt.";
+                TempData["AlertType"] = "danger";
                 return View(model);
             }
 
@@ -34,49 +40,41 @@ namespace UniversityProject.Controllers
 
             if (user == null)
             {
-                user =await _userManager.FindByNameAsync(model.UserName);
+                user = await _userManager.FindByNameAsync(model.UserName);
                 if (user == null)
                 {
-                    // Log and handle user not found scenario
-                   
-                    ViewBag.Error =  "Invalid login attempt.";
+                    TempData["AlertMessage"] = "Invalid login attempt.";
+                    TempData["AlertType"] = "danger";
+                    return View(model);
                 }
-                return View(model);
             }
 
             var passwordCheck = await _userManager.CheckPasswordAsync(user, model.Password);
 
             if (passwordCheck)
             {
-                // Ensure user.UserName is not null
-                if (string.IsNullOrEmpty(user.UserName))
-                {
-                    // Log and handle scenario where UserName is null
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
-
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "User");
+                    TempData["AlertMessage"] = "Login successful.";
+                    TempData["AlertType"] = "success";
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    // Log and handle failed login attempt
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    TempData["AlertMessage"] = "Invalid login attempt.";
+                    TempData["AlertType"] = "danger";
                     return View(model);
                 }
             }
             else
             {
-                // Log and handle incorrect password scenario
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                TempData["AlertMessage"] = "Invalid login attempt.";
+                TempData["AlertType"] = "danger";
                 return View(model);
             }
         }
-
 
         public IActionResult Register()
         {
@@ -84,12 +82,12 @@ namespace UniversityProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(User model, string Password, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register(User model, string Password)
         {
             model.EmailConfirmed = true;
             model.PhoneNumberConfirmed = true;
             model.CreatedOn = DateTime.Now;
-            model.Birthdate= DateTime.Now;
+            model.Birthdate = DateTime.Now;
             model.HelpPassword = Password;
             model.IsModified = true;
 
@@ -98,18 +96,16 @@ namespace UniversityProject.Controllers
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(model, "student");
-                ViewBag.register = "Register Success";
+                TempData["AlertMessage"] = "Registration successful.";
+                TempData["AlertType"] = "success";
                 return RedirectToAction("Login", "Account");
             }
             else
             {
-                // If there are errors, add them to ViewBag or ModelState as needed
-                ViewBag.Error = result.Errors.ToList().ToString();
-                return View(model); // Return to registration form with errors
+                TempData["AlertMessage"] = string.Join("; ", result.Errors.Select(e => e.Description));
+                TempData["AlertType"] = "danger";
+                return View(model);
             }
         }
-
-
-
     }
 }

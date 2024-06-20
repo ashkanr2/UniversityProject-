@@ -18,6 +18,8 @@ namespace UniversityProject.Entities
         public bool  IsDeleted { get; set; }
         public bool  IsActive { get; set; }
         public  DateTime  CreatedOn { get; set; }
+        public Image Image { get; set; }
+        public Guid? ImageId { get; set; }
         public ICollection<UserCourse> UserCourses { get; set; }
     }
 }

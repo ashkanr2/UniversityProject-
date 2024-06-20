@@ -5,17 +5,20 @@
 <br />
 <br />
 <br />
-@{
-    if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            @ViewBag.Error
-        </div>
-    }
+
+
+@if (TempData["AlertMessage"] != null)
+{
+    <script>
+        alert('@Html.Raw(TempData["AlertMessage"])')
+    </script>
 }
-
 <br />
-
+<br />
+<br />
+<br />
+<br />
+ 
 
 <div class="row">
     <div class="col-lg-6 col-md-10 m-auto m-b-30">
@@ -31,6 +34,30 @@
                 }
                 <form asp-action="Register" asp-controller="Account" method="post" class="col-sm-6">
                     <div id="form" class="m-t-30 m-b-30" asp-controller="Account" asp-action="Login" method="POST" role="form">
+
+                        <div class="form-group">
+                            <div class="input-group round">
+                                <span class="input-group-addon">
+                                    <i class="icon-envelope"></i>
+                                </span>
+                                <input asp-for="@Model.Firstname" class="form-control ltr text-left" type="text" required placeholder="First Name">
+                            </div><!-- /.input-group -->
+                        </div><!-- /.form-group -->
+
+                        <div class="form-group">
+                            <div class="input-group round">
+                                <span class="input-group-addon">
+                                    <i class="icon-envelope"></i>
+                                </span>
+                                <input asp-for="@Model.Lastname" class="form-control ltr text-left" type="text" required placeholder="Last Name">
+                            </div><!-- /.input-group -->
+                        </div><!-- /.form-group -->
+
+
+
+
+
+
                         <div class="form-group">
                             <div class="input-group round">
                                 <span class="input-group-addon">
@@ -57,27 +84,7 @@
                             </div><!-- /.input-group -->
                         </div><!-- /.form-group -->
 
-                        <div class="form-group">
-                            <div class="input-group round">
-                                <span class="input-group-addon">
-                                    <i class="icon-envelope"></i>
-                                </span>
-                                <input asp-for="@Model.Firstname" class="form-control ltr text-left" type="text" required placeholder="First Name">
-                            </div><!-- /.input-group -->
-                        </div><!-- /.form-group -->
 
-                        <div class="form-group">
-                            <div class="input-group round">
-                                <span class="input-group-addon">
-                                    <i class="icon-envelope"></i>
-                                </span>
-                                <input asp-for="@Model.Lastname" class="form-control ltr text-left" type="text" required placeholder="Last Name">
-                            </div><!-- /.input-group -->
-                        </div><!-- /.form-group -->
-
-
-
-                        
                         <button style="background-color: green; color: white;" class="btn btn-round btn-block col-sm-6" type="submit">Register</button>
 
                     </div>
