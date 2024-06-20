@@ -1,4 +1,5 @@
 ﻿using UniversityProject.Entities;
+using UniversityProject.Models;
 
 namespace UniversityProject.Interfaces
 {
@@ -6,8 +7,9 @@ namespace UniversityProject.Interfaces
     {
         Task<IEnumerable<Image>> GetAllAsync();
         Task<Image> GetByIdAsync(Guid id);
-        Task AddAsync(Image image);
+        Task<ValidationResult> AddAsync(IFormFile File, Guid imageTypeId);
         Task UpdateAsync(Image image);
         Task DeleteAsync(Guid id);
+        Task<Guid> GetImageType(int imageTypeCode);
     }
 }

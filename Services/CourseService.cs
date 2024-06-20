@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UniversityProject.Models;
 
 namespace UniversityProject.Services
 {
@@ -45,12 +46,15 @@ namespace UniversityProject.Services
             }
         }
 
-        public async Task AddAsync(Course lesson)
+        public async Task<string> AddAsync(Course course)
         {
             try
             {
-                _context.Courses.Add(lesson);
+                course.CreatedOn=DateTime.Now;
+                course.IsDeleted=false;
+                _context.Courses.Add(course);
                 await _context.SaveChangesAsync();
+                return "course Added successfully";
             }
             catch (Exception ex)
             {
@@ -59,30 +63,45 @@ namespace UniversityProject.Services
             }
         }
 
-        public async Task UpdateAsync(Course lesson)
+        public async Task<string> UpdateAsync(Course course)
         {
+           
             try
             {
-                _context.Entry(lesson).State = EntityState.Modified;
+                var courseModel = await _context.Courses.FirstOrDefaultAsync(x => x.Id == course.Id);
+                if ( courseModel == null) 
+                {
+                    return "Error Course Not Found";
+                }
+               courseModel.Cost = course.Cost;
+                courseModel.ImageId= course.ImageId;
+                courseModel.Name = course.Name;
+                courseModel.Description = course.Description;
+                courseModel.TeacherId = course.TeacherId;
+                courseModel.IsActive = course.IsActive; 
+                courseModel.IsDeleted= course.IsDeleted;
                 await _context.SaveChangesAsync();
+                return "course updated successfully";
             }
             catch (Exception ex)
             {
                 // Log the exception
-                throw new Exception($"An error occurred while updating the course with ID {lesson.Id}.", ex);
+                throw new Exception($"An error occurred while updating the course with ID {course.Id}.", ex);
             }
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<string> DeleteAsync(Guid id)
         {
             try
             {
-                var lesson = await _context.Courses.FindAsync(id);
-                if (lesson != null)
+                var course =  await _context.Courses.FirstOrDefaultAsync(x => x.Id == id);
+                if (course == null)
                 {
-                    _context.Courses.Remove(lesson);
-                    await _context.SaveChangesAsync();
+                    return "Course Not Found";
                 }
+                course.IsDeleted=true;
+                await _context.SaveChangesAsync();  
+                return "course Deleted successfully";
             }
             catch (Exception ex)
             {

@@ -8,9 +8,9 @@ namespace UniversityProject.Interfaces
         Task<Course> GetByIdAsync(Guid id);
         Task<IEnumerable<Course>> GetAllByTeacherId(Guid id);
         Task<List<Course>> SearchCourses(string query);
-        Task AddAsync(Course lesson);
-        Task UpdateAsync(Course lesson);
-        Task DeleteAsync(Guid id);
+        Task<string> AddAsync(Course lesson);
+        Task<string> UpdateAsync(Course lesson);
+        Task<string> DeleteAsync(Guid id);
         
     }
 }

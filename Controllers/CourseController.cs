@@ -17,7 +17,9 @@ namespace UniversityProject.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IUserCourseService _userCourseService;
+        private readonly IImageService _imageService;
         public CourseController(
+            IImageService imageService,
             ICourseService courseService,
             UserManager<User> userManager,
             ICourseService lessonService,
@@ -31,6 +33,7 @@ namespace UniversityProject.Controllers
             _userManager = userManager;
             _courseService=courseService;
             _userCourseService = userCourseService;
+            _imageService=imageService; 
         }
 
         public async Task<IActionResult> Index(string query=null)
@@ -95,13 +98,34 @@ namespace UniversityProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn,Cost")] Course course)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn,Cost,Image")] AddCourseVm addCourseVM )
         {
+            
+            var course = new Course();
+            var teacherId = new Guid();
             var user = await _signInManager.UserManager.GetUserAsync(User);
-            var teacherId = (await _teacherservice.GetByIdUser(user.Id)).Id;
-            course.CreatedOn=DateTime.Now;
-            course.IsDeleted=false;
+            if(user.IssystemAdmin)
+            {
+                teacherId=addCourseVM.SelectedTeacherId;
+            }
+            else
+            {
+                teacherId = (await _teacherservice.GetByIdUser(user.Id)).Id;
+            }
+            if((addCourseVM.Image != null && addCourseVM.Image.Length > 0))
+            {
+                int imageType = 1;
+                var imageTypeId = await _imageService.GetImageType(imageType);
+                var result = await _imageService.AddAsync(addCourseVM.Image , imageTypeId);
+                if (result.Isvalid)
+                {
+                    course.ImageId= result.resultId;
+                }
+            }
+
+
             course.TeacherId=teacherId;
+            course.IsActive=addCourseVM.IsActive;
             await _courseService.AddAsync(course);
             return RedirectToAction(nameof(Index));
 
