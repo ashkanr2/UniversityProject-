@@ -15,7 +15,9 @@ namespace UniversityProject.Models
 
         public bool IsActive { get; set; }
         public List<Teacher> Teachers { get; set; }
-        public   IFormFile Image { get; set; }
-        
+        public IFormFile Image { get; set; }
+
+        public DayOfWeek Day { get; set; }
+        public TimeSpan Time { get; set; }
     }
 }

@@ -21,5 +21,6 @@ namespace UniversityProject.Entities
         public Image Image { get; set; }
         public Guid? ImageId { get; set; }
         public ICollection<UserCourse> UserCourses { get; set; }
+        public ICollection<DayAndTime> Schedule { get; set; }
     }
 }

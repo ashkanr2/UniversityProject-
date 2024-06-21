@@ -13,10 +13,11 @@ namespace UniversityProject.Services
     public class CourseService : ICourseService
     {
         private readonly UniversityDBContext _context;
-
-        public CourseService(UniversityDBContext context)
+        private readonly IUserCourseService _userCourseService;
+        public CourseService(UniversityDBContext context , IUserCourseService userCourseService)
         {
             _context = context;
+            _userCourseService= userCourseService;
         }
 
         public async Task<IEnumerable<Course>> GetAllAsync()
@@ -133,6 +134,33 @@ namespace UniversityProject.Services
             return await coursesQuery;
         }
 
+        public async Task<List<CourseListVM>> GetAllUserCourses(Guid userId)
+        {
+            var courselistvm = new List<CourseListVM>();
+            var courses = await _userCourseService.GetAllCoursesByUserId(userId);
 
+            foreach (var course in courses)
+            {
+                int studentNumbr = await _userCourseService.CalculateStudentCount(course.Id);
+                var courseVM = new CourseListVM
+                {
+                    Id = course.Id,
+                    Name = course.Name,
+                    Description = course.Description,
+                    TeacherName = course.Teacher.Name, 
+                    Cost = course.Cost,
+                    IsDeleted = course.IsDeleted,
+                    IsActive = course.IsActive,
+                    CreatedOn = course.CreatedOn,
+                    Image = course.Image,
+                    ImageId = course.ImageId,
+                    StudentNumber = studentNumbr 
+                };
+
+                courselistvm.Add(courseVM);
+            }
+
+            return courselistvm;
+        }
     }
 }

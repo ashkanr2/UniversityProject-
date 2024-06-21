@@ -1,52 +1,47 @@
 ﻿@model IEnumerable<UniversityProject.Entities.Course>
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<UniversityProject.Entities.User> SignInManager
+@inject UserManager<UniversityProject.Entities.User> UserManager
 @{
     ViewData["Title"] = "Courses";
     var isAuthenticated = User.Identity.IsAuthenticated;
+    UniversityProject.Entities.User currentUser = null;
+    if (isAuthenticated)
+    {
+        currentUser = await UserManager.GetUserAsync(User);
+        
+    }
 }
-
-@if (!ViewData.ModelState.IsValid)
+@if (ViewBag.ErrorMessagequery != null)
 {
-    <div class="alert alert-danger">
-        @Html.ValidationSummary()
-    </div>
+    <script>
+        alert('@Html.Raw(ViewBag.ErrorMessagequery)')
+    </script>
 }
 
-
-
-
-<!-- ######## Page  Title End ####### -->
-<!-- ################# popular Cources Starts Here#######################--->
 <div class="popular-cources pc2">
-
-
-    <!--  ************************* Page Title Starts Here ************************** -->
     <div class="page-nav no-margin row">
         <div class="container">
             <div class="row">
-                <h2>Cources</h2>
+                <h2>Courses</h2>
                 <ul>
                     <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
-                    <li><i class="fas fa-angle-double-right"></i> Cources</li>
+                    <li><i class="fas fa-angle-double-right"></i> Courses</li>
                     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
                     {
                         <li style="color: green;"><i class="fas fa-angle-double-right"></i> @ViewBag.ErrorMessage</li>
-
                     }
-
                 </ul>
             </div>
         </div>
     </div>
 
-
     <div class="our-blog">
         <div class="container">
             <p>
-                @if (SignInManager.IsSignedIn(User))
+                @if (isAuthenticated && (currentUser.IsTeacher || currentUser.IssystemAdmin))
                 {
-                    <a href="@Url.Action("Create")" class="btn btn-primary ">Create New Course</a>
+                    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Course</a>
                 }
                 <br />
                 <br />
@@ -55,42 +50,32 @@
                         @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
                         {
                             <input class="form-control" type="search" placeholder="@ViewBag.ErrorMessage" aria-label="Search" name="query">
-
                         }
                         @if (string.IsNullOrEmpty(ViewBag.ErrorMessage))
                         {
                             <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="query">
                         }
-
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </div>
                 </form>
             </p>
         </div>
-
         <br />
         <br />
-
     </div>
 
-
-
-
     <div class="container">
-
         <div class="row courc-ro">
-
             @foreach (var item in Model)
             {
                 <div class="col-md-4">
                     <div class="courc-card">
-                        <img src="assets/images/cources/cource-1.jpg" alt="">
+                        <img src="loading.gif" data-image-id="@item.ImageId" alt="Course Image" class="course-image">
                         <div class="cource-det">
                             <h6>@item.Name</h6>
                             <ul>
                                 <li>
                                     <i class="fas fa-graduation-cap"></i> @item.Teacher.Name
-
                                     @if (item.Cost == 0)
                                     {
                                         <span>Free</span>
@@ -99,12 +84,11 @@
                                     {
                                         <span>@item.Cost</span>
                                     }
-
                                 </li>
                                 <li><i class="far fa-calendar-plus"></i> @item.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</li>
                             </ul>
 
-                            @if (isAuthenticated)
+                            @if (isAuthenticated && (!currentUser.IsTeacher && !currentUser.IssystemAdmin))
                             {
                                 <form action="@Url.Action("AddToMyCourse", "Course")" method="post">
                                     @Html.Hidden("courseId", item.Id)
@@ -120,5 +104,6 @@
     </div>
 </div>
 
-
-
+ 
+  <script src="~/js/loadImages.js"></script>
+ 

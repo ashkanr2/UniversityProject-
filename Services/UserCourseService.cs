@@ -10,7 +10,7 @@ namespace UniversityProject.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly UniversityDBContext _context;
-        public UserCourseService(UserManager<User> userManager , UniversityDBContext context )
+        public UserCourseService(UserManager<User> userManager, UniversityDBContext context)
         {
             _userManager = userManager;
             _context = context;
@@ -25,10 +25,10 @@ namespace UniversityProject.Services
                 {
                     return false;
                 }
-                var IsExist =await CourseIsExistForUser(userId , courseId);
+                var IsExist = await CourseIsExistForUser(userId, courseId);
                 if (IsExist)
                 {
-                    return true; 
+                    return true;
                 }
 
                 var userCourse = new UserCourse
@@ -36,7 +36,7 @@ namespace UniversityProject.Services
                     UserId = userId,
                     CourseId = courseId
                 };
-                 _context.UserCourses.Add(userCourse);
+                _context.UserCourses.Add(userCourse);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -47,32 +47,42 @@ namespace UniversityProject.Services
             }
         }
 
+        public async Task<int> CalculateStudentCount(Guid CourseId)
+        {
+            try 
+            { 
+                var studenttNumber = _context.UserCourses.Where(x=>x.CourseId == CourseId ).Count();
+                if (studenttNumber > 0) { return studenttNumber; }
+                else { return 0; }
+            }
+            catch (Exception ex)
+            { 
+                throw; 
+            }
+        }
+
         public async Task<bool> CourseIsExistForUser(Guid userId, Guid courseId)
         {
             try
             {
-                var result =  _context.UserCourses.Any(x=>x.CourseId == courseId && x.UserId == userId);
-                
+                var result = _context.UserCourses.Any(x => x.CourseId == courseId && x.UserId == userId);
+
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                  
+
                 throw;
-               
+
             }
         }
 
-        public Task<IEnumerable<Course>> GetAllByUserId(Guid userId)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<IEnumerable<Course>> GetAllCoursesByUserId(Guid userId)
         {
             try
             {
-                var courses = await _context.UserCourses
+                var courses = await _context.UserCourses.Include(x=>x.course).ThenInclude(x=>x.Teacher)
                     .Where(x => x.UserId == userId)
                     .Select(x => x.course)
                     .ToListAsync();

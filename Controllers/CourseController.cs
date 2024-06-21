@@ -39,22 +39,22 @@ namespace UniversityProject.Controllers
         public async Task<IActionResult> Index(string query=null)
         {
             IEnumerable<Course> courses = null;
+            
             if (!string.IsNullOrEmpty(query) && query.Length < 3)
             {
                 // Handle cases where the query is too short or empty
-                ViewBag.ErrorMessage = "Search query must be at least 3 characters long.";
-                return View();
+                ViewBag.ErrorMessagequery = "Search query must be at least 3 characters long.";
             }
             if (query != null && query.Length>=3) 
             {
-                courses = (await _courseService.SearchCourses(query)).OrderBy(c => c.CreatedOn);
+                courses = (await _courseService.SearchCourses(query)).OrderByDescending(c => c.CreatedOn);
                 ViewBag.ErrorMessage = "Search Courses  Like "+query;
 
             }
            
             if (courses == null)
             {
-                courses = (await _courseService.GetAllAsync()).OrderBy(c=>c.CreatedOn);
+                courses = (await _courseService.GetAllAsync()).OrderByDescending(c=>c.CreatedOn);
             }
 
             return View(courses);
@@ -80,6 +80,7 @@ namespace UniversityProject.Controllers
                 var teachers = await _teacherservice.GetAllAsync();
                 courseVM.Teachers = teachers.ToList();
                 ViewBag.TeacherList = new SelectList(courseVM.Teachers, "Id", "Name");
+                return View(courseVM);
             }
             else
             {
@@ -91,14 +92,14 @@ namespace UniversityProject.Controllers
                     return View(courseVM);
                 }
             }
-            ModelState.AddModelError(string.Empty, "User Is not Teacher");
+            TempData["AlertMessage"] = "User Is not Teacher";
             return RedirectToAction("Index");
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn,Cost,Image")] AddCourseVm addCourseVM )
+        public async Task<IActionResult> Create( AddCourseVm addCourseVM )
         {
             
             var course = new Course();
@@ -122,7 +123,7 @@ namespace UniversityProject.Controllers
                     course.ImageId= result.resultId;
                 }
             }
-
+            course.Cost=addCourseVM.Cost;
             course.Name=addCourseVM.Name;
             course.TeacherId=teacherId;
             course.IsActive=addCourseVM.IsActive;
@@ -180,21 +181,25 @@ namespace UniversityProject.Controllers
 
         public async Task<IActionResult> MyCourses()
         {
+
             var user = await _signInManager.UserManager.GetUserAsync(User);
-            if(user.IsTeacher)
-            {
-                var teacher = await _teacherservice.GetByIdUser(user.Id);
-                var courses = await _courseService.GetAllByTeacherId(teacher.Id);
-                if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
-                return View(courses);
-            }
-            else
-            {
-                var courses = await _userCourseService.GetAllByUserId(user.Id);
-                if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
-                return View(courses);
-            }
-           
+            //if(user.IsTeacher)
+            //{
+            //    var teacher = await _teacherservice.GetByIdUser(user.Id);
+            //     courses = await _courseService.GetAllByTeacherId(teacher.Id);
+            //    if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
+
+            //}
+            //else
+            //{
+            //     courses = await _userCourseService.GetAllCoursesByUserId(user.Id);
+            //    if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
+
+            //}
+            var courseListVm =await _courseService.GetAllUserCourses(user.Id);
+
+            return View(courseListVm);
+
         }
         [HttpPost]
         public async Task<IActionResult> AddToMyCourse(Guid courseId)
@@ -218,7 +223,7 @@ namespace UniversityProject.Controllers
                 return RedirectToAction("Index"); // Redirect to course list or display an error message
             }
         }
-        public int MyProperty { get; set; }
+
     }
 }
 

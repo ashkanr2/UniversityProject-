@@ -22,9 +22,10 @@ namespace UniversityProject.Services
             return await _context.Images.ToListAsync();
         }
 
-        public async Task<Image> GetByIdAsync(Guid id)
+       public async Task<string> GetImageUrlByIdAsync(Guid imageId)
         {
-            return await _context.Images.FindAsync(id);
+            var image = await _context.Images.FindAsync(imageId);
+            return image?.Url ?? "assets/images/cources/cource-1.jpg"; // Return a default image URL if not found
         }
 
         public async Task<ValidationResult> AddAsync(IFormFile file, Guid imageTypeId)
