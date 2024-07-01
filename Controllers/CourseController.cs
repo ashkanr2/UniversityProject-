@@ -181,24 +181,45 @@ namespace UniversityProject.Controllers
 
         public async Task<IActionResult> MyCourses()
         {
-
+            IEnumerable<Course> courses = null;
+            var courselistvm = new List<CourseListVM>();
             var user = await _signInManager.UserManager.GetUserAsync(User);
-            //if(user.IsTeacher)
-            //{
-            //    var teacher = await _teacherservice.GetByIdUser(user.Id);
-            //     courses = await _courseService.GetAllByTeacherId(teacher.Id);
-            //    if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
+            if (user.IsTeacher)
+            {
+                var teacher = await _teacherservice.GetByIdUser(user.Id);
+                 courses = await _courseService.GetAllByTeacherId(teacher.Id);
+                if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
 
-            //}
-            //else
-            //{
-            //     courses = await _userCourseService.GetAllCoursesByUserId(user.Id);
-            //    if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
+            }
+            else
+            {
+                courses = await _userCourseService.GetAllCoursesByUserId(user.Id);
+                if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
 
-            //}
-            var courseListVm =await _courseService.GetAllUserCourses(user.Id);
+            }
+            //var courseListVm = await _courseService.GetAllUserCourses(user.Id);
+            foreach (var course in courses)
+            {
+                int studentNumbr = await _userCourseService.CalculateStudentCount(course.Id);
+                var courseVM = new CourseListVM
+                {
+                    Id = course.Id,
+                    Name = course.Name,
+                    Description = course.Description,
+                    TeacherName = course.Teacher.Name,
+                    Cost = course.Cost,
+                    IsDeleted = course.IsDeleted,
+                    IsActive = course.IsActive,
+                    CreatedOn = course.CreatedOn,
+                    Image = course.Image,
+                    ImageId = course.ImageId,
+                    StudentNumber = studentNumbr
+                };
 
-            return View(courseListVm);
+                courselistvm.Add(courseVM);
+            }
+
+            return View(courselistvm);
 
         }
         [HttpPost]
