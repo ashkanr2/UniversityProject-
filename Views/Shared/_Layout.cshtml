@@ -2,7 +2,18 @@
 <html lang="en">
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<UniversityProject.Entities.User> SignInManager
+@inject UserManager<UniversityProject.Entities.User> UserManager
 
+@{
+    ViewData["Title"] = "Home";
+    var isAuthenticated = User.Identity.IsAuthenticated;
+    UniversityProject.Entities.User currentUser = null;
+    if (isAuthenticated)
+    {
+        currentUser = await UserManager.GetUserAsync(User);
+
+    }
+}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -82,12 +93,18 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Course" asp-action="Index">Courses</a>
                             </li>
+                            @if (isAuthenticated && ( !currentUser.IssystemAdmin))
+                            {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Course" asp-action="MyCourses">MyCourse</a>
                             </li>
+                            }
+                            @if (isAuthenticated && ( currentUser.IssystemAdmin))
+                                {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Users</a>
                             </li>
+                                }
                         @*     <li class="nav-item">
                                 <!-- Move the search form outside the list -->
                                 <form asp-controller="Home" asp-action="Search" method="get" >

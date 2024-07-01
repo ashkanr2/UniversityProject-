@@ -57,6 +57,9 @@ namespace UniversityProject.Controllers
 
                 if (result.Succeeded)
                 {
+                    var userLoginInfo = new UserLoginInfo("DefaultProvider", user.Email, "DefaultProvider");
+                    var addLoginResult = await _userManager.AddLoginAsync(user, userLoginInfo);
+
                     TempData["AlertMessage"] = "Login successful.";
                     TempData["AlertType"] = "success";
                     return RedirectToAction("Index", "Home");

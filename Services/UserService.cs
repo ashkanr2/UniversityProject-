@@ -2,6 +2,7 @@
 using UniversityProject.Entities;
 using UniversityProject.Infrastructures;
 using UniversityProject.Interfaces;
+using UniversityProject.Models;
 
 namespace UniversityProject.Services
 {
@@ -16,12 +17,15 @@ namespace UniversityProject.Services
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Where(u => !u.IsDeleted)
+                .ToListAsync();
         }
 
         public async Task<User> GetByIdAsync(Guid id)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
         }
 
         public async Task AddAsync(User user)
@@ -31,18 +35,30 @@ namespace UniversityProject.Services
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex )
+            catch (Exception)
             {
-
                 throw;
             }
-           
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task UpdateAsync(EditUserVM model)
         {
-            _context.Entry(user).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var user = await _context.Users.FindAsync(model.Id);
+            if (user != null)
+            {
+                user.Firstname = model.Firstname;
+                user.Lastname = model.Lastname;
+                user.Birthdate = model.Birthdate;
+                user.IssystemAdmin = model.IssystemAdmin;
+                user.IsDeleted = model.IsDeleted;
+                user.IsModified = model.IsModified;
+
+                // Handle ProfileImage upload if necessary
+                // Example: user.ImageId = ...;
+
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteAsync(Guid id)
@@ -50,9 +66,11 @@ namespace UniversityProject.Services
             var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-                _context.Users.Remove(user);
+                user.IsDeleted = true;
+                _context.Users.Update(user);
                 await _context.SaveChangesAsync();
             }
         }
+
     }
 }

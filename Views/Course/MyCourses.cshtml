@@ -1,8 +1,17 @@
 ﻿@model IEnumerable<UniversityProject.Models.CourseListVM>
 
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UniversityProject.Entities.User> SignInManager
+@inject UserManager<UniversityProject.Entities.User> UserManager
 @{
     ViewData["Title"] = "Courses";
-    
+    var isAuthenticated = User.Identity.IsAuthenticated;
+    UniversityProject.Entities.User currentUser = null;
+    if (isAuthenticated)
+    {
+        currentUser = await UserManager.GetUserAsync(User);
+
+    }
 }
 @if (ViewBag.ErrorMessagequery != null)
 {
@@ -38,9 +47,7 @@
 
     <div class="our-blog">
         <div class="container text--center">
-            <p>
-                <a href="@Url.Action("Create")" class="btn btn-primary">Create New User</a>
-            </p>
+          
             <br />
             <br />
             <table class="table table-bordered table-hover text-center">
@@ -51,7 +58,11 @@
                         <th>TeacherName</th>
                         <th>Created</th>
                         <th>StudentNumber</th>
-                        <th>Actions</th>
+                        @if (isAuthenticated && currentUser.IsTeacher)
+                        {
+                            <th>Actions</th>
+                        }
+                       
                     </tr>
                 </thead>
                 <tbody>
@@ -63,14 +74,18 @@
                             <td>@item.TeacherName</td>
                             <td>@item.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</td>
                             <td>@item.StudentNumber</td>
-                            <td>
-                                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-info btn-sm">Details</a>
-                                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm">Delete</a>
-                                <!-- Button trigger modal -->
-                                
+                            @if (isAuthenticated && currentUser.IsTeacher)
+                            {
+                                <td>
+                                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-info btn-sm">Details</a>
+                                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm">Delete</a>
+                                    <!-- Button trigger modal -->
 
-                            </td>
+
+                                </td>
+                            }
+                           
                         </tr>
                     }
                 </tbody>
