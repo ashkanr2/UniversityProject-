@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using UniversityProject.Entities;
 using UniversityProject.Infrastructures;
 using UniversityProject.Interfaces;
+using UniversityProject.Models;
 using YourNamespace.Controllers;
 
 namespace UniversityProject.Services
@@ -17,9 +18,20 @@ namespace UniversityProject.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<CourseTime>> GetAllAsync()
+        public async Task<IEnumerable<CourseTimeListVm>> GetAllAsync()
         {
-            return await _context.CourseTime.ToListAsync();
+            return await _context.CourseTime
+                .Select(ct => new CourseTimeListVm
+                {
+                    Id = ct.Id,
+                    Days = string.Join(", ", ct.Days), // Convert List<DayOfWeek> to comma-separated string
+                    Time = ct.Time,
+                    StartDate = ct.StartDate,
+                    EndDate = ct.EndDate,
+                    IsDeleted = ct.IsDeleted,
+                    Name = ct.Name
+                })
+                .ToListAsync();
         }
 
         public async Task<CourseTime> GetByIdAsync(Guid id)

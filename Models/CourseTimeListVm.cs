@@ -8,7 +8,7 @@ namespace UniversityProject.Models
         [Key]
         public Guid Id { get; set; }
 
-        public List<DayOfWeek> Days { get; set; }
+        public  string Days{ get; set; }
 
         public TimeSpan Time { get; set; }
 
@@ -17,7 +17,7 @@ namespace UniversityProject.Models
         public DateTime EndDate { get; set; }
 
         public bool IsDeleted { get; set; }
+        public string Name { get; set; }
 
-        public ICollection<Course> Courses { get; set; }
     }
 }

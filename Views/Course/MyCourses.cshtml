@@ -10,7 +10,6 @@
     if (isAuthenticated)
     {
         currentUser = await UserManager.GetUserAsync(User);
-
     }
 }
 @if (ViewBag.ErrorMessagequery != null)
@@ -20,83 +19,61 @@
     </script>
 }
 
+<br />
+<br />
+<br />
 
-<div class="popular-cources pc2">
-    <div class="page-nav no-margin row">
-        <div class="container">
-            <div class="row">
-                <h2>My Courses</h2>
-                <ul>
-                    <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
-                    <li><i class="fas fa-angle-double-right"></i>My Courses</li>
-                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+<head>
+    <meta charset="utf-8" />
+    <title>Edit Course Time</title>
+    <link rel="stylesheet" href="~/Calender/ClenderCss.css" />
+</head>
+
+<div class="container">
+    <div class="w-95 w-md-75 w-lg-60 w-xl-55 mx-auto mb-6 text-center">
+        <div class="subtitle alt-font"><span class="text-primary">#04</span><span class="title">Course List</span></div>
+        <h2 class="display-18 display-md-16 display-lg-14 mb-0">Browse Courses</h2>
+    </div>
+
+    <div class="schedule-table">
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Teacher Name</th>
+                    <th>Cost</th>
+                    <th>Student Number</th>
+                    <th>Created On</th>
+                    @if (isAuthenticated && currentUser.IsTeacher)
                     {
-                        <li style="color: green;"><i class="fas fa-angle-double-right"></i> @ViewBag.ErrorMessage</li>
+                        <th>Actions</th>
                     }
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="our-blog">
-        
-        <br />
-        <br />
-    </div>
-
-
-    <div class="our-blog">
-        <div class="container text--center">
-          
-            <br />
-            <br />
-            <table class="table table-bordered table-hover text-center">
-                <thead class="thead-dark">
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var course in Model)
+                {
                     <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>TeacherName</th>
-                        <th>Created</th>
-                        <th>StudentNumber</th>
+                        <td>@course.Name</td>
+                        <td>@course.Description</td>
+                        <td>@course.TeacherName</td>
+                        <td>@course.Cost</td>
+                        <td>@course.StudentNumber</td>
+                        <td>@course.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</td>
                         @if (isAuthenticated && currentUser.IsTeacher)
                         {
-                            <th>Actions</th>
+                            <td>
+                                <a href="@Url.Action("Edit", new { id = course.Id })" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="@Url.Action("Details", new { id = course.Id })" class="btn btn-info btn-sm">Details</a>
+                                <a href="@Url.Action("Delete", new { id = course.Id })" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
                         }
-                       
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.Name</td>
-                            <td>@item.Description</td>
-                            <td>@item.TeacherName</td>
-                            <td>@item.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</td>
-                            <td>@item.StudentNumber</td>
-                            @if (isAuthenticated && currentUser.IsTeacher)
-                            {
-                                <td>
-                                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-info btn-sm">Details</a>
-                                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm">Delete</a>
-                                    <!-- Button trigger modal -->
-
-
-                                </td>
-                            }
-                           
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
-
-
 </div>
 
-
-
 <script src="~/js/loadImages.js"></script>
-

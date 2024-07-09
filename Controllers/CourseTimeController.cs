@@ -49,7 +49,8 @@ namespace YourNamespace.Controllers
                     Time = model.Time, // Time should already be properly parsed as TimeSpan
                     EndDate = model.EndDate,
                     IsDeleted = model.IsDeleted,
-                    Name=model.Name
+                    Name=model.Name,
+                    StartDate=model.StartDate
                     // Assign other properties as needed
                 };
 
@@ -59,7 +60,7 @@ namespace YourNamespace.Controllers
 
             return View(model);
         }
-        // GET: CourseTime/Index
+        // GET: CourseTime/Indexv
         public async Task<IActionResult> Index()
         {
             var courseTimes = await _courseTimeService.GetAllAsync();
