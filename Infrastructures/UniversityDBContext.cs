@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
 
 namespace UniversityProject.Infrastructures
 {
@@ -55,14 +57,29 @@ namespace UniversityProject.Infrastructures
             //    .HasForeignKey(c => c.CourseTimeId)
             //    .OnDelete(DeleteBehavior.SetNull);  // Allows for a nullable DayAndTimeId
 
+            // Convert Days property to JSON string for storage
+            var daysConverter = new ValueConverter<List<DayOfWeek>, string>(
+            v => JsonConvert.SerializeObject(v),
+             v => JsonConvert.DeserializeObject<List<DayOfWeek>>(v));
+
+            modelBuilder.Entity<CourseTime>()
+                .Property(e => e.Days)
+                .HasConversion(daysConverter);
+
+            // Seed data for CourseTime
             modelBuilder.Entity<CourseTime>().HasData(
-           new CourseTime
-           {
-               Id = Guid.NewGuid(), // Generate a new GUID for the default DayAndTime entry
-               Day = DayOfWeek.Monday, // Set the default day
-               Time = new TimeSpan(9, 0, 0), // Set the default time (e.g., 9:00 AM)
-               IsDeleted = false // Set default value for IsDeleted
-           });
+                new CourseTime
+                {
+                    Id = Guid.NewGuid(), // Generate a new GUID for the default DayAndTime entry
+                    Days = new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday }, // Set the default days
+                    Time = new TimeSpan(9, 0, 0), // Set the default time (e.g., 9:00 AM)
+                    StartDate = new DateTime(2024, 7, 10), // Set the default start date
+                    EndDate = new DateTime(2024, 12, 10), // Set the default end date
+                    IsDeleted = false, // Set default value for IsDeleted
+                    Name=""
+                });
+
+            base.OnModelCreating(modelBuilder);
         }
 
     }

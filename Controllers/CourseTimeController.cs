@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using UniversityProject.Entities;
 using UniversityProject.Interfaces;
+using UniversityProject.Models;
+using UniversityProject.Services;
+
 
 
 namespace YourNamespace.Controllers
@@ -14,46 +19,94 @@ namespace YourNamespace.Controllers
             _courseTimeService = courseTimeService;
         }
 
+        // GET: CourseTime/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: CourseTime/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CourseTimeViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Convert selected days to a list
+                var selectedDays = new List<DayOfWeek>();
+                if (model.Sunday) selectedDays.Add(DayOfWeek.Sunday);
+                if (model.Monday) selectedDays.Add(DayOfWeek.Monday);
+                if (model.Tuesday) selectedDays.Add(DayOfWeek.Tuesday);
+                if (model.Wednesday) selectedDays.Add(DayOfWeek.Wednesday);
+                if (model.Thursday) selectedDays.Add(DayOfWeek.Thursday);
+                if (model.Friday) selectedDays.Add(DayOfWeek.Friday);
+                if (model.Saturday) selectedDays.Add(DayOfWeek.Saturday);
+
+                // Create CourseTime entity
+                var courseTime = new CourseTime
+                {
+                    Days = selectedDays,
+                    Time = model.Time, // Time should already be properly parsed as TimeSpan
+                    EndDate = model.EndDate,
+                    IsDeleted = model.IsDeleted
+                    // Assign other properties as needed
+                };
+
+                await _courseTimeService.CreateAsync(courseTime);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(model);
+        }
+        // GET: CourseTime/Index
         public async Task<IActionResult> Index()
         {
             var courseTimes = await _courseTimeService.GetAllAsync();
             return View(courseTimes);
         }
 
-        public IActionResult Create()
+        // GET: CourseTime/Details/{id}
+        public async Task<IActionResult> Details(Guid? id)
         {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CourseTime courseTime)
-        {
-            if (ModelState.IsValid)
+            if (id == null)
             {
-                await _courseTimeService.CreateAsync(courseTime);
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
+
+            var courseTime = await _courseTimeService.GetByIdAsync(id.Value);
+            if (courseTime == null)
+            {
+                return NotFound();
+            }
+
             return View(courseTime);
         }
 
-        public async Task<IActionResult> Edit(Guid id)
+        // GET: CourseTime/Edit/{id}
+        public async Task<IActionResult> Edit(Guid? id)
         {
-            //var courseTime = await _courseTimeService.GetByIdAsync(id);
-            //if (courseTime == null)
-            //{
-            //    return NotFound();
-            //}
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var courseTime = await _courseTimeService.GetByIdAsync(id.Value);
+            if (courseTime == null)
+            {
+                return NotFound();
+            }
+
+            return View(courseTime);
         }
 
+        // POST: CourseTime/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, CourseTime courseTime)
         {
             if (id != courseTime.Id)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             if (ModelState.IsValid)
@@ -62,40 +115,52 @@ namespace YourNamespace.Controllers
                 {
                     await _courseTimeService.UpdateAsync(courseTime);
                 }
-                catch (ApplicationException ex)
+                catch (DbUpdateConcurrencyException)
                 {
-                    ModelState.AddModelError(string.Empty, ex.Message);
-                    return View(courseTime);
+                    if (!await CourseTimeExists(courseTime.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(courseTime);
         }
 
-        public async Task<IActionResult> Delete(Guid id)
+        // GET: CourseTime/Delete/{id}
+        public async Task<IActionResult> Delete(Guid? id)
         {
-            var courseTime = await _courseTimeService.GetByIdAsync(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var courseTime = await _courseTimeService.GetByIdAsync(id.Value);
             if (courseTime == null)
             {
                 return NotFound();
             }
+
             return View(courseTime);
         }
 
+        // POST: CourseTime/Delete/{id}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            try
-            {
-                await _courseTimeService.DeleteAsync(id);
-            }
-            catch (ApplicationException ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-                return View(await _courseTimeService.GetByIdAsync(id));
-            }
+            await _courseTimeService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<bool> CourseTimeExists(Guid id)
+        {
+            var courseTime = await _courseTimeService.GetByIdAsync(id);
+            return courseTime != null;
         }
     }
 }

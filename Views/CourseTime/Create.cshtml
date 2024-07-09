@@ -1,1 +1,67 @@
-﻿
+﻿@model UniversityProject.Models.CourseTimeViewModel
+
+@{
+    ViewData["Title"] = "Create CourseTime";
+}
+
+<h1>Create CourseTime</h1>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+ 
+<h1>Create CourseTime</h1>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label class="control-label">Days</label>
+        <div>
+            <label class="checkbox-inline">
+                <input asp-for="Sunday" /> Sunday
+            </label>
+            <label class="checkbox-inline">
+                <input asp-for="Monday" /> Monday
+            </label>
+            <label class="checkbox-inline">
+                <input asp-for="Tuesday" /> Tuesday
+            </label>
+            <label class="checkbox-inline">
+                <input asp-for="Wednesday" /> Wednesday
+            </label>
+            <label class="checkbox-inline">
+                <input asp-for="Thursday" /> Thursday
+            </label>
+            <label class="checkbox-inline">
+                <input asp-for="Friday" /> Friday
+            </label>
+            <label class="checkbox-inline">
+                <input asp-for="Saturday" /> Saturday
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Time" class="control-label">Time</label>
+        <input asp-for="Time" class="form-control" />
+        <span asp-validation-for="Time" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EndDate" class="control-label">End Date</label>
+        <input asp-for="EndDate" class="form-control" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsDeleted" class="control-label">Is Deleted</label>
+        <input asp-for="IsDeleted" class="form-control" />
+        <span asp-validation-for="IsDeleted" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

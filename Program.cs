@@ -75,6 +75,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=CourseTime}/{action=Create}/{id?}");
 
 app.Run();

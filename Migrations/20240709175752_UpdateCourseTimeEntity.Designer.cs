@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityProject.Infrastructures;
 
@@ -11,9 +12,11 @@ using UniversityProject.Infrastructures;
 namespace UniversityProject.Migrations
 {
     [DbContext(typeof(UniversityDBContext))]
-    partial class UniversityDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240709175752_UpdateCourseTimeEntity")]
+    partial class UpdateCourseTimeEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,9 +165,6 @@ namespace UniversityProject.Migrations
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("CourseTimeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -193,8 +193,6 @@ namespace UniversityProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseTimeId");
-
                     b.HasIndex("ImageId");
 
                     b.HasIndex("ImageId1");
@@ -220,10 +218,6 @@ namespace UniversityProject.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -237,11 +231,10 @@ namespace UniversityProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("79cd0337-2158-44f7-a7ac-54f6048267a3"),
+                            Id = new Guid("a4d0f741-a167-489e-a596-e288048c9575"),
                             Days = "[1,3,5]",
                             EndDate = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
-                            Name = "",
                             StartDate = new DateTime(2024, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Time = new TimeSpan(0, 9, 0, 0, 0)
                         });
@@ -504,10 +497,6 @@ namespace UniversityProject.Migrations
 
             modelBuilder.Entity("UniversityProject.Entities.Course", b =>
                 {
-                    b.HasOne("UniversityProject.Entities.CourseTime", "CourseTime")
-                        .WithMany("Courses")
-                        .HasForeignKey("CourseTimeId");
-
                     b.HasOne("UniversityProject.Entities.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId")
@@ -522,8 +511,6 @@ namespace UniversityProject.Migrations
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CourseTime");
 
                     b.Navigation("Image");
 
@@ -583,11 +570,6 @@ namespace UniversityProject.Migrations
             modelBuilder.Entity("UniversityProject.Entities.Course", b =>
                 {
                     b.Navigation("UserCourses");
-                });
-
-            modelBuilder.Entity("UniversityProject.Entities.CourseTime", b =>
-                {
-                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("UniversityProject.Entities.Image", b =>

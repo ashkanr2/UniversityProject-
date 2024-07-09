@@ -20,8 +20,8 @@ namespace UniversityProject.Entities
         public Image Image { get; set; }
         public Guid? ImageId { get; set; }  // Note that ImageId is also nullable
 
-        //public Guid? CourseTimeId { get; set; }  // Make DayAndTimeId nullable
-        //public CourseTime? CourseTime { get; set; }
+        public Guid? CourseTimeId { get; set; }   
+        public CourseTime  CourseTime { get; set; }
         public ICollection<UserCourse> UserCourses { get; set; }
     }
 

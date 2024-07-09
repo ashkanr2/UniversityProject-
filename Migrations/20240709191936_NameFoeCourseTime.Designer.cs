@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityProject.Infrastructures;
 
@@ -11,9 +12,11 @@ using UniversityProject.Infrastructures;
 namespace UniversityProject.Migrations
 {
     [DbContext(typeof(UniversityDBContext))]
-    partial class UniversityDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240709191936_NameFoeCourseTime")]
+    partial class NameFoeCourseTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,7 +224,6 @@ namespace UniversityProject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")
@@ -237,11 +239,10 @@ namespace UniversityProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("79cd0337-2158-44f7-a7ac-54f6048267a3"),
+                            Id = new Guid("e2ac1253-304e-4c4e-bd71-fca15c492602"),
                             Days = "[1,3,5]",
                             EndDate = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
-                            Name = "",
                             StartDate = new DateTime(2024, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Time = new TimeSpan(0, 9, 0, 0, 0)
                         });

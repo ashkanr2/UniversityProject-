@@ -19,7 +19,7 @@ namespace UniversityProject.Services
 
         public async Task<IEnumerable<CourseTime>> GetAllAsync()
         {
-            return await _context.CourseTime.Where(ct => !ct.IsDeleted).ToListAsync();
+            return await _context.CourseTime.ToListAsync();
         }
 
         public async Task<CourseTime> GetByIdAsync(Guid id)
@@ -31,49 +31,32 @@ namespace UniversityProject.Services
         {
             try
             {
-                courseTime.Id = Guid.NewGuid();
                 _context.CourseTime.Add(courseTime);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                // Handle exception
-                throw new ApplicationException("An error occurred while creating the CourseTime", ex);
+
+                Console.WriteLine();
+                throw;
             }
+          
         }
 
         public async Task UpdateAsync(CourseTime courseTime)
         {
-            try
-            {
-                _context.CourseTime.Update(courseTime);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Handle exception
-                throw new ApplicationException("An error occurred while updating the CourseTime", ex);
-            }
+            _context.Entry(courseTime).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            try
+            var courseTime = await _context.CourseTime.FindAsync(id);
+            if (courseTime != null)
             {
-                var courseTime = await _context.CourseTime.FindAsync(id);
-                if (courseTime != null)
-                {
-                    courseTime.IsDeleted = true;
-                    _context.CourseTime.Update(courseTime);
-                    await _context.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exception
-                throw new ApplicationException("An error occurred while deleting the CourseTime", ex);
+                _context.CourseTime.Remove(courseTime);
+                await _context.SaveChangesAsync();
             }
         }
     }
 }
-
