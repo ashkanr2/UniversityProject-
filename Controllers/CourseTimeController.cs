@@ -39,12 +39,12 @@ namespace YourNamespace.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var courseTime = await _courseTimeService.GetByIdAsync(id);
-            if (courseTime == null)
-            {
-                return NotFound();
-            }
-            return View(courseTime);
+            //var courseTime = await _courseTimeService.GetByIdAsync(id);
+            //if (courseTime == null)
+            //{
+            //    return NotFound();
+            //}
+            return View();
         }
 
         [HttpPost]

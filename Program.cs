@@ -25,6 +25,7 @@ builder.Services.AddDbContext<UniversityDBContext>(options =>
 builder.Services.AddAuthorization();
 // Register your services
 builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.AddScoped<ICourseTimeService, CourseTimeService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
