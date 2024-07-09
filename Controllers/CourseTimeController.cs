@@ -48,7 +48,8 @@ namespace YourNamespace.Controllers
                     Days = selectedDays,
                     Time = model.Time, // Time should already be properly parsed as TimeSpan
                     EndDate = model.EndDate,
-                    IsDeleted = model.IsDeleted
+                    IsDeleted = model.IsDeleted,
+                    Name=model.Name
                     // Assign other properties as needed
                 };
 

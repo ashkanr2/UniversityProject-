@@ -3,8 +3,6 @@
 @{
     ViewData["Title"] = "Create CourseTime";
 }
-
-<h1>Create CourseTime</h1>
 <br />
 <br />
 <br />
@@ -12,7 +10,8 @@
 <br />
 <br />
 <br />
- 
+<br />
+<br />
 <h1>Create CourseTime</h1>
 
 <form asp-action="Create">
@@ -44,18 +43,23 @@
     </div>
     <div class="form-group">
         <label asp-for="Time" class="control-label">Time</label>
-        <input asp-for="Time" class="form-control" />
+        <input asp-for="Time" class="form-control" type="time" step="1" />
         <span asp-validation-for="Time" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="EndDate" class="control-label">End Date</label>
-        <input asp-for="EndDate" class="form-control" />
+        <input asp-for="EndDate" class="form-control" type="date" />
         <span asp-validation-for="EndDate" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="IsDeleted" class="control-label">Is Deleted</label>
-        <input asp-for="IsDeleted" class="form-control" />
+        <input asp-for="IsDeleted" class="form-control" type="checkbox" />
         <span asp-validation-for="IsDeleted" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />

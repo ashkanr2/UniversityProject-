@@ -36,5 +36,6 @@ namespace UniversityProject.Models
 
         [Display(Name = "Is Deleted")]
         public bool IsDeleted { get; set; }
+        public string Name { get; set; }
     }
 }
