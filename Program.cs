@@ -5,12 +5,15 @@ using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using UniversityProject.Infrastructures;
 using Microsoft.AspNetCore.Identity;
 using UniversityProject.Entities;
+using UniversityProject.Models.EmailSetting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
+// Configure EmailSettings
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddAuthorization();
 
@@ -21,7 +24,8 @@ builder.Services.AddDbContext<UniversityDBContext>(options =>
 
 builder.Services.AddAuthorization();
 // Register your services
-builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
