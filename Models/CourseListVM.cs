@@ -17,6 +17,17 @@ namespace UniversityProject.Models
             public Image Image { get; set; }
             public Guid? ImageId { get; set; }
             public int StudentNumber { get; set; }
+            public List<DayOfWeek> Days { get; set; }
+
+            public TimeSpan Time { get; set; }
+
+            public DateTime StartDate { get; set; }
+
+            public DateTime EndDate { get; set; }
+
+           public bool IsExist { get; set; }
+
+
 
     }
 }

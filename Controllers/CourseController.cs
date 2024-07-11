@@ -39,7 +39,8 @@ namespace UniversityProject.Controllers
         public async Task<IActionResult> Index(string query=null)
         {
             IEnumerable<Course> courses = null;
-            
+            var courseListVMs = new List<CourseListVM>();
+            var user = await _signInManager.UserManager.GetUserAsync(User);
             if (!string.IsNullOrEmpty(query) && query.Length < 3)
             {
                 // Handle cases where the query is too short or empty
@@ -48,17 +49,42 @@ namespace UniversityProject.Controllers
             }
             if (query != null && query.Length>=3) 
             {
-                courses = (await _courseService.SearchCourses(query)).OrderByDescending(c => c.CreatedOn);
+                courses = (await _courseService.SearchCourses(query)).OrderByDescending(c => c.CreatedOn).ToList();
                 ViewBag.ErrorMessage = "Search Courses  Like "+query;
 
             }
            
             if (courses == null)
             {
-                courses = (await _courseService.GetAllAsync()).OrderByDescending(c=>c.CreatedOn);
+                courses = (await _courseService.GetAllAsync()).OrderByDescending(c=>c.CreatedOn).ToList();
+               
             }
+           
+            foreach (var course in courses)
+            {
 
-            return View(courses);
+                var courseListVM = new CourseListVM
+                {
+                    Id = course.Id,
+                    Name = course.Name,
+                    Description = course.Description,
+                    TeacherName = course.Teacher != null ? course.Teacher.Name : null, // Assuming Teacher has a Name property
+                    Cost = course.Cost,
+                    IsDeleted = course.IsDeleted,
+                    IsActive = course.IsActive,
+                    CreatedOn = course.CreatedOn,
+                    Image = course.Image,
+                    ImageId = course.ImageId,
+                    Days = course.Days,
+                    Time = course.Time,
+                    StartDate = course.StartDate,
+                    EndDate = course.EndDate,
+                    IsExist= await _userCourseService.CourseIsExistForUser(user.Id,course.Id)
+                    // Add other properties from Course to CourseListVM as needed
+                };
+                courseListVMs.Add(courseListVM);
+            }
+            return View(courseListVMs);
         }
 
 
@@ -254,7 +280,7 @@ namespace UniversityProject.Controllers
 
                 if (checkResult.StartsWith("Error"))
                 {
-                    TempData["ErrorMessage"] = checkResult;
+                    TempData["ErrorMessage"] = checkResult.ToString();
                     return RedirectToAction("Index"); // Redirect to course list or display an error message
                 }
 

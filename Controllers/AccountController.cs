@@ -112,6 +112,17 @@ namespace UniversityProject.Controllers
 
             if (result.Succeeded)
             {
+                var loginTime = DateTime.Now; 
+                var userIp = HttpContext.Connection.RemoteIpAddress.ToString();
+                var emailMessage = $"Hello {model.UserName},\n\n" +
+                           $"Thank you for registering on our platform!\n\n" +
+                           $"You have Create  account on {loginTime.ToShortDateString()} at {loginTime.ToShortTimeString()}.\n\n" +
+                           $"IP Address: {userIp}\n\n" +
+                           $"(University project By Erfan And Ashkan)";
+
+
+                await _emailService.SendEmailAsync(model.Email, "Register Notification", emailMessage);
+
                 await _userManager.AddToRoleAsync(model, "student");
                 TempData["AlertMessage"] = "Registration successful.";
                 TempData["AlertType"] = "success";

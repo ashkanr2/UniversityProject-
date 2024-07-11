@@ -14,7 +14,7 @@ namespace UniversityProject.Interfaces
         Task<string> DeleteAsync(Guid id);
         Task<List<CourseListVM>> GetAllUserCourses(Guid userId);
         string CanUserAddCourse(Guid userId, Guid courseId);
-
+        
 
 
     }

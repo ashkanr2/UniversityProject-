@@ -14,7 +14,9 @@ namespace UniversityProject.Services
     {
         private readonly UniversityDBContext _context;
         private readonly IUserCourseService _userCourseService;
-        public CourseService(UniversityDBContext context , IUserCourseService userCourseService)
+
+
+        public CourseService(UniversityDBContext context, IUserCourseService userCourseService)
         {
             _context = context;
             _userCourseService= userCourseService;
@@ -38,7 +40,7 @@ namespace UniversityProject.Services
         {
             try
             {
-                return await _context.Courses.Include(x => x.Teacher).FirstOrDefaultAsync(x=>x.Id ==  id);
+                return await _context.Courses.Include(x => x.Teacher).FirstOrDefaultAsync(x => x.Id ==  id);
             }
             catch (Exception ex)
             {
@@ -66,20 +68,20 @@ namespace UniversityProject.Services
 
         public async Task<string> UpdateAsync(Course course)
         {
-           
+
             try
             {
                 var courseModel = await _context.Courses.FirstOrDefaultAsync(x => x.Id == course.Id);
-                if ( courseModel == null) 
+                if (courseModel == null)
                 {
                     return "Error Course Not Found";
                 }
-               courseModel.Cost = course.Cost;
+                courseModel.Cost = course.Cost;
                 courseModel.ImageId= course.ImageId;
                 courseModel.Name = course.Name;
                 courseModel.Description = course.Description;
                 courseModel.TeacherId = course.TeacherId;
-                courseModel.IsActive = course.IsActive; 
+                courseModel.IsActive = course.IsActive;
                 courseModel.IsDeleted= course.IsDeleted;
                 await _context.SaveChangesAsync();
                 return "course updated successfully";
@@ -95,13 +97,13 @@ namespace UniversityProject.Services
         {
             try
             {
-                var course =  await _context.Courses.FirstOrDefaultAsync(x => x.Id == id);
+                var course = await _context.Courses.FirstOrDefaultAsync(x => x.Id == id);
                 if (course == null)
                 {
                     return "Course Not Found";
                 }
                 course.IsDeleted=true;
-                await _context.SaveChangesAsync();  
+                await _context.SaveChangesAsync();
                 return "course Deleted successfully";
             }
             catch (Exception ex)
@@ -147,14 +149,14 @@ namespace UniversityProject.Services
                     Id = course.Id,
                     Name = course.Name,
                     Description = course.Description,
-                    TeacherName = course.Teacher.Name, 
+                    TeacherName = course.Teacher.Name,
                     Cost = course.Cost,
                     IsDeleted = course.IsDeleted,
                     IsActive = course.IsActive,
                     CreatedOn = course.CreatedOn,
                     Image = course.Image,
                     ImageId = course.ImageId,
-                    StudentNumber = studentNumbr 
+                    StudentNumber = studentNumbr
                 };
 
                 courselistvm.Add(courseVM);
@@ -193,12 +195,16 @@ namespace UniversityProject.Services
                     if ((newCourseStartTime < existingCourseEndTime && newCourseEndTime > existingCourseStartTime) ||
                         (existingCourseStartTime < newCourseEndTime && existingCourseEndTime > newCourseStartTime))
                     {
-                        return $"Error: = Course '{newCourse.Name}' times conflict with existing course '{existingCourse.Name}'.";
+
+                        return "Error: = Course  times conflict with existing course  =>  "+ (existingCourse.Name).ToString() ;
                     }
                 }
             }
 
             return "Success: User can add this course.";
         }
+
+        
+
     }
 }
