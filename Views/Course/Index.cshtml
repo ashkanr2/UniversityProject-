@@ -9,13 +9,25 @@
     if (isAuthenticated)
     {
         currentUser = await UserManager.GetUserAsync(User);
-        
     }
 }
+
 @if (ViewBag.ErrorMessagequery != null)
 {
     <script>
-        alert('@Html.Raw(ViewBag.ErrorMessagequery)')
+        alert('@Html.Raw(ViewBag.ErrorMessagequery)');
+    </script>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        alert('@Html.Raw(TempData["ErrorMessage"])');
+    </script>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        alert('@Html.Raw(TempData["SuccessMessage"])');
     </script>
 }
 
@@ -25,7 +37,7 @@
             <div class="row">
                 <h2>Courses</h2>
                 <ul>
-                    <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
                     <li><i class="fas fa-angle-double-right"></i> Courses</li>
                     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
                     {
@@ -85,7 +97,19 @@
                                         <span>@item.Cost</span>
                                     }
                                 </li>
-                                <li><i class="far fa-calendar-plus"></i> @item.CreatedOn.ToString("yyyy/MM/dd hh:mm tt")</li>
+                                <li><i class="far fa-calendar-plus"></i> @item.StartDate.ToString("yyyy/MM/dd hh:mm tt")</li>
+                                <li><i class="far fa-calendar-plus"></i> @item.EndDate.ToString("yyyy/MM/dd hh:mm tt")</li>
+                                <li><i class="far fa-calendar-plus"></i> @item.Time</li>
+                                <li>
+                                    @foreach (var day in item.Days)
+                                    {
+                                        <span>@day</span>
+                                        @if (day != item.Days.Last())
+                                        {
+                                            <span>-</span>
+                                        }
+                                    }
+                                </li>
                             </ul>
 
                             @if (isAuthenticated && (!currentUser.IsTeacher && !currentUser.IssystemAdmin))
@@ -95,7 +119,6 @@
                                     <button type="submit" class="btn btn-sm btn-outline-secondary">Add To My Course</button>
                                 </form>
                             }
-
                         </div>
                     </div>
                 </div>
@@ -104,6 +127,4 @@
     </div>
 </div>
 
- 
-  <script src="~/js/loadImages.js"></script>
- 
+<script src="~/js/loadImages.js"></script>

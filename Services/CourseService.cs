@@ -162,5 +162,43 @@ namespace UniversityProject.Services
 
             return courselistvm;
         }
+        public string CanUserAddCourse(Guid userId, Guid courseId)
+        {
+            var newCourse = _context.Courses.Find(courseId);
+
+            if (newCourse == null)
+            {
+                return "Error: Course does not exist.";
+            }
+
+            var userCourses = _context.UserCourses
+                                      .Where(uc => uc.UserId == userId)
+                                      .Select(uc => uc.course)
+                                      .ToList();
+
+            if (userCourses.Any(c => c.Id == courseId))
+            {
+                return "Error: You are already enrolled in this course.";
+            }
+            foreach (var existingCourse in userCourses)
+            {
+                if (existingCourse.Days.Intersect(newCourse.Days).Any())
+                {
+                    var newCourseStartTime = newCourse.StartDate.Add(newCourse.Time);
+                    var newCourseEndTime = newCourse.EndDate.Add(newCourse.Time);
+
+                    var existingCourseStartTime = existingCourse.StartDate.Add(existingCourse.Time);
+                    var existingCourseEndTime = existingCourse.EndDate.Add(existingCourse.Time);
+
+                    if ((newCourseStartTime < existingCourseEndTime && newCourseEndTime > existingCourseStartTime) ||
+                        (existingCourseStartTime < newCourseEndTime && existingCourseEndTime > newCourseStartTime))
+                    {
+                        return $"Error: = Course '{newCourse.Name}' times conflict with existing course '{existingCourse.Name}'.";
+                    }
+                }
+            }
+
+            return "Success: User can add this course.";
+        }
     }
 }

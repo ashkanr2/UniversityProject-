@@ -26,6 +26,25 @@
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
 
+                    <div class="form-group">
+                        <label class="control-label">Days</label>
+                        <div class="weekDays-selector">
+                            <input asp-for="Monday" type="checkbox" id="weekday-mon" class="weekday" />
+                            <label for="weekday-mon">M</label>
+                            <input asp-for="Tuesday" type="checkbox" id="weekday-tue" class="weekday" />
+                            <label for="weekday-tue">T</label>
+                            <input asp-for="Wednesday" type="checkbox" id="weekday-wed" class="weekday" />
+                            <label for="weekday-wed">W</label>
+                            <input asp-for="Thursday" type="checkbox" id="weekday-thu" class="weekday" />
+                            <label for="weekday-thu">T</label>
+                            <input asp-for="Friday" type="checkbox" id="weekday-fri" class="weekday" />
+                            <label for="weekday-fri">F</label>
+                            <input asp-for="Saturday" type="checkbox" id="weekday-sat" class="weekday" />
+                            <label for="weekday-sat">S</label>
+                            <input asp-for="Sunday" type="checkbox" id="weekday-sun" class="weekday" />
+                            <label for="weekday-sun">S</label>
+                        </div>
+                    </div>
                    @*  <div class="form-group">
                         <label asp-for="Description" class="control-label"></label>
                         <input asp-for="Description" class="form-control" />
@@ -48,7 +67,21 @@
                             <input type="text" asp-for="Description" class="form-control round ltr text-left" id="Description" placeholder="Description">
                         </div><!-- /.input-group-->
                     </div><!-- /.form-group -->
-
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="control-label">Start Date</label>
+                        <input asp-for="StartDate" class="form-control" type="date" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EndDate" class="control-label">End Date</label>
+                        <input asp-for="EndDate" class="form-control" type="date" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Time" class="control-label">Time</label>
+                        <input asp-for="Time" class="form-control" type="time" required />
+                        <span asp-validation-for="Time" class="text-danger"></span>
+                    </div>
                     <div class="form-group">
                         <label asp-for="Cost" class="control-label"></label>
                         <input asp-for="Cost" class="form-control" />
@@ -78,3 +111,47 @@
         </div>
     </div>
 </div>
+
+
+
+<style>
+    .weekDays-selector input {
+        display: none !important;
+    }
+
+        .weekDays-selector input[type=checkbox] + label {
+            display: inline-block;
+            border-radius: 6px;
+            background: #dddddd;
+            height: 40px;
+            width: 30px;
+            margin-right: 3px;
+            line-height: 40px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .weekDays-selector input[type=checkbox]:checked + label {
+            background: #2AD705;
+            color: #ffffff;
+        }
+
+    label {
+        display: block;
+        font: 1rem 'Fira Sans', sans-serif;
+    }
+
+    input[type=time], input[type=date] {
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .form-control[type=checkbox] {
+        width: auto;
+        margin-top: 5px;
+    }
+</style>

@@ -43,6 +43,7 @@ namespace UniversityProject.Controllers
             if (!string.IsNullOrEmpty(query) && query.Length < 3)
             {
                 // Handle cases where the query is too short or empty
+                ViewBag.ErrorMessagequery =null;
                 ViewBag.ErrorMessagequery = "Search query must be at least 3 characters long.";
             }
             if (query != null && query.Length>=3) 
@@ -123,6 +124,20 @@ namespace UniversityProject.Controllers
                     course.ImageId= result.resultId;
                 }
             }
+            var selectedDays = new List<DayOfWeek>();
+            if (addCourseVM.Sunday) selectedDays.Add(DayOfWeek.Sunday);
+            if (addCourseVM.Monday) selectedDays.Add(DayOfWeek.Monday);
+            if (addCourseVM.Tuesday) selectedDays.Add(DayOfWeek.Tuesday);
+            if (addCourseVM.Wednesday) selectedDays.Add(DayOfWeek.Wednesday);
+            if (addCourseVM.Thursday) selectedDays.Add(DayOfWeek.Thursday);
+            if (addCourseVM.Friday) selectedDays.Add(DayOfWeek.Friday);
+            if (addCourseVM.Saturday) selectedDays.Add(DayOfWeek.Saturday);
+
+ 
+            course.Days=selectedDays;
+            course.Time=addCourseVM.Time;
+            course.EndDate=addCourseVM.EndDate;
+            course.StartDate=addCourseVM.StartDate;
             course.Cost=addCourseVM.Cost;
             course.Name=addCourseVM.Name;
             course.TeacherId=teacherId;
@@ -226,24 +241,44 @@ namespace UniversityProject.Controllers
         public async Task<IActionResult> AddToMyCourse(Guid courseId)
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User not found.";
+                return RedirectToAction("Index");
+            }
+
             try
             {
-                var enrollmentResult = await _userCourseService.AddCourseForUser(user.Id, courseId);
-                if (!enrollmentResult)
+                // Check if the user can add the course
+                var checkResult = _courseService.CanUserAddCourse(user.Id, courseId);
+
+                if (checkResult.StartsWith("Error"))
                 {
-                    ModelState.AddModelError(string.Empty, "Failed to enroll in the course.");
-                    // Redirect to course list or display an error message
+                    TempData["ErrorMessage"] = checkResult;
+                    return RedirectToAction("Index"); // Redirect to course list or display an error message
                 }
 
+                // Proceed to add the course for the user
+                var enrollmentResult = await _userCourseService.AddCourseForUser(user.Id, courseId);
+
+                if (!enrollmentResult)
+                {
+                    TempData["ErrorMessage"] = "Failed to enroll in the course.";
+                    return RedirectToAction("Index"); // Redirect to course list or display an error message
+                }
+
+                TempData["SuccessMessage"] = "Successfully enrolled in the course.";
                 return RedirectToAction("Index"); // Redirect to course list or display a success message
             }
             catch (Exception ex)
             {
                 // Log the exception or handle it as needed
-                ModelState.AddModelError(string.Empty, "An error occurred while enrolling in the course.");
+                TempData["ErrorMessage"] = "An error occurred while enrolling in the course.";
                 return RedirectToAction("Index"); // Redirect to course list or display an error message
             }
         }
+
+
 
     }
 }
