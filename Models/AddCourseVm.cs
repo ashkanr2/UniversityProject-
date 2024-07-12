@@ -39,8 +39,13 @@ namespace UniversityProject.Models
         [Display(Name = "Saturday")]
         public bool Saturday { get; set; }
 
-        [Display(Name = "Time")]
-        public TimeSpan Time { get; set; }
+        [Display(Name = "StartTime")]
+        public TimeSpan StartTime { get; set; }
+
+
+        [Display(Name = "EndTime")]
+        public TimeSpan EndTime { get; set; }
+
 
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }

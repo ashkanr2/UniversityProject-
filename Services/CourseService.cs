@@ -83,6 +83,10 @@ namespace UniversityProject.Services
                 courseModel.TeacherId = course.TeacherId;
                 courseModel.IsActive = course.IsActive;
                 courseModel.IsDeleted= course.IsDeleted;
+                courseModel.StartTime= course.StartTime;
+                courseModel.EndDate= course.EndDate;
+                courseModel.StartDate= course.StartDate;
+                courseModel.EndTime= course.EndTime;
                 await _context.SaveChangesAsync();
                 return "course updated successfully";
             }
@@ -147,6 +151,10 @@ namespace UniversityProject.Services
                 var courseVM = new CourseListVM
                 {
                     Id = course.Id,
+                    StartDate= course.StartDate,
+                    EndDate=course.EndDate,
+                    StartTime=course.StartTime, 
+                    EndTime=course.EndTime,
                     Name = course.Name,
                     Description = course.Description,
                     TeacherName = course.Teacher.Name,
@@ -186,11 +194,11 @@ namespace UniversityProject.Services
             {
                 if (existingCourse.Days.Intersect(newCourse.Days).Any())
                 {
-                    var newCourseStartTime = newCourse.StartDate.Add(newCourse.Time);
-                    var newCourseEndTime = newCourse.EndDate.Add(newCourse.Time);
+                    var newCourseStartTime = newCourse.StartDate.Add(newCourse.StartTime);
+                    var newCourseEndTime = newCourse.EndDate.Add(newCourse.StartTime);
 
-                    var existingCourseStartTime = existingCourse.StartDate.Add(existingCourse.Time);
-                    var existingCourseEndTime = existingCourse.EndDate.Add(existingCourse.Time);
+                    var existingCourseStartTime = existingCourse.StartDate.Add(existingCourse.StartTime);
+                    var existingCourseEndTime = existingCourse.EndDate.Add(existingCourse.StartTime);
 
                     if ((newCourseStartTime < existingCourseEndTime && newCourseEndTime > existingCourseStartTime) ||
                         (existingCourseStartTime < newCourseEndTime && existingCourseEndTime > newCourseStartTime))

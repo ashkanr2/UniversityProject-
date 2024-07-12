@@ -76,10 +76,11 @@ namespace UniversityProject.Controllers
                     Image = course.Image,
                     ImageId = course.ImageId,
                     Days = course.Days,
-                    Time = course.Time,
+                    StartTime = course.StartTime,
+                    EndTime=course.EndTime,
                     StartDate = course.StartDate,
                     EndDate = course.EndDate,
-                    IsExist= await _userCourseService.CourseIsExistForUser(user.Id,course.Id)
+                    IsExist= user==null? true : await _userCourseService.CourseIsExistForUser(user.Id,course.Id)
                     // Add other properties from Course to CourseListVM as needed
                 };
                 courseListVMs.Add(courseListVM);
@@ -161,7 +162,7 @@ namespace UniversityProject.Controllers
 
  
             course.Days=selectedDays;
-            course.Time=addCourseVM.Time;
+            course.StartTime=addCourseVM.StartTime;
             course.EndDate=addCourseVM.EndDate;
             course.StartDate=addCourseVM.StartDate;
             course.Cost=addCourseVM.Cost;
@@ -169,6 +170,7 @@ namespace UniversityProject.Controllers
             course.TeacherId=teacherId;
             course.IsActive=addCourseVM.IsActive;
             course.Description=addCourseVM.Description;
+            course.EndTime=addCourseVM.EndTime; 
             await _courseService.AddAsync(course);
             return RedirectToAction(nameof(Index));
 
@@ -254,7 +256,9 @@ namespace UniversityProject.Controllers
                     CreatedOn = course.CreatedOn,
                     Image = course.Image,
                     ImageId = course.ImageId,
-                    StudentNumber = studentNumbr
+                    StudentNumber = studentNumbr,
+                    EndTime= course.EndTime
+
                 };
 
                 courselistvm.Add(courseVM);

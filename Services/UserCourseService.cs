@@ -65,6 +65,7 @@ namespace UniversityProject.Services
         {
             try
             {
+
                 var result = _context.UserCourses.Any(x => x.CourseId == courseId && x.UserId == userId);
 
                 return result;

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityProject.Infrastructures;
 
@@ -11,9 +12,11 @@ using UniversityProject.Infrastructures;
 namespace UniversityProject.Migrations
 {
     [DbContext(typeof(UniversityDBContext))]
-    partial class UniversityDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240712163630_ChangeTimeToStartTime")]
+    partial class ChangeTimeToStartTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,9 +182,6 @@ namespace UniversityProject.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
-
                     b.Property<Guid?>("ImageId")
                         .HasColumnType("uniqueidentifier");
 
@@ -253,7 +253,7 @@ namespace UniversityProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6aab03bf-1946-4fb2-8079-d9f74e6ac1b9"),
+                            Id = new Guid("a6b0022a-6e26-44cf-ae38-0f25d161b10c"),
                             Days = "[1,3,5]",
                             EndDate = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,

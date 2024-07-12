@@ -24,9 +24,12 @@ namespace UniversityProject.Entities
         //public CourseTime  CourseTime { get; set; }
         public List<DayOfWeek> Days { get; set; }
 
-        public TimeSpan Time { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
 
         public DateTime StartDate { get; set; }
+
+
 
         public DateTime EndDate { get; set; }
 

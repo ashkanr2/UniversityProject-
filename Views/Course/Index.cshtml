@@ -83,23 +83,23 @@
                 <div class="col-md-4">
                     <div class="courc-card">
                         <img src="loading.gif" data-image-id="@item.ImageId" alt="Course Image" class="course-image">
-                        <div class="cource-det">
-                            <h6>@item.Name</h6>
+                        <div class="cource-det text-primary">
+                            <h6 class="text-info">@item.Name</h6>
                             <ul>
                                 <li>
-                                    <i class="fas fa-graduation-cap"></i> @item.TeacherName
+                                    <i class="fas fa-graduation-cap "> @item.TeacherName  </i>
                                     @if (item.Cost == 0)
                                     {
-                                        <span>Free</span>
+                                        <span >Free</span>
                                     }
                                     else
                                     {
-                                        <span>@item.Cost</span>
+                                        <span class="text-info">@item.Cost</span>
                                     }
                                 </li>
-                                <li><i class="far fa-calendar-plus"></i> @item.StartDate.ToString("yyyy/MM/dd hh:mm tt")</li>
-                                <li><i class="far fa-calendar-plus"></i> @item.EndDate.ToString("yyyy/MM/dd hh:mm tt")</li>
-                                <li><i class="far fa-calendar-plus"></i> @item.Time</li>
+                                <li class="text-secondary"><i class="far fa-calendar-plus text-secondary"></i> @item.StartDate.ToString("yyyy/MM/dd hh:mm tt")</li>
+                                <li class="text-secondary"><i class="far fa-calendar-plus text-secondary"></i> @item.EndDate.ToString("yyyy/MM/dd hh:mm tt")</li>
+                                <li class="text-warning"><i class="far fa-calendar-plus"></i> @item.StartTime - @item.EndTime</li>
                                 <li>
                                     @foreach (var day in item.Days)
                                     {
