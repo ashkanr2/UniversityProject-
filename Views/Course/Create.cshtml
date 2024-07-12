@@ -13,17 +13,20 @@
 
 <div class="row">
     <div class="col-lg-6 col-md-10 m-auto m-b-30">
-        <div  >
+        <div>
             <div class="user-box">
 
                 <form asp-action="Create" method="post" enctype="multipart/form-data">
 
-                   
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
 
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
                         <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
+                        @* <span asp-validation-for="Name" class="text-danger"></span> *@
                     </div>
 
                     <div class="form-group">
@@ -45,10 +48,10 @@
                             <label for="weekday-sun">S</label>
                         </div>
                     </div>
-                   @*  <div class="form-group">
-                        <label asp-for="Description" class="control-label"></label>
-                        <input asp-for="Description" class="form-control" />
-                        <span asp-validation-for="Description" class="text-danger"></span>
+                    @*  <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
                     </div> *@
 
                     <div class="form-group">
@@ -93,7 +96,7 @@
                         <span asp-validation-for="Cost" class="text-danger"></span>
                     </div>
 
-                   
+
                     <div class="form-group">
                         <label class="sr-only control-label" for="image"></label>
                         <div class="input-group round">
@@ -103,10 +106,10 @@
                             <input type="file" asp-for="Image" id="image" name="image">
                         </div><!-- /.input-group-->
                     </div><!-- /.form-group -->
-@*                      <div class="form-group">
-                        <label asp-for="IsActive" class="control-label"></label>
-                        <input asp-for="IsActive" class="control-label" />
-                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                    @*                      <div class="form-group">
+                    <label asp-for="IsActive" class="control-label"></label>
+                    <input asp-for="IsActive" class="control-label" />
+                    <span asp-validation-for="IsActive" class="text-danger"></span>
                     </div> *@
 
                     <br />
@@ -160,3 +163,93 @@
         margin-top: 5px;
     }
 </style>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.querySelector("form");
+        form.addEventListener("submit", function (event) {
+            var startDate = document.querySelector("#StartDate").value;
+            var endDate = document.querySelector("#EndDate").value;
+            var name = document.querySelector("#Name").value;
+            var selectedTeacherId = document.querySelector("#SelectedTeacherId").value;
+            var description = document.querySelector("#Description").value;
+            var cost = document.querySelector("#Cost").value;
+
+            var monday = document.querySelector("#Monday").checked;
+            var tuesday = document.querySelector("#Tuesday").checked;
+            var wednesday = document.querySelector("#Wednesday").checked;
+            var thursday = document.querySelector("#Thursday").checked;
+            var friday = document.querySelector("#Friday").checked;
+            var saturday = document.querySelector("#Saturday").checked;
+            var sunday = document.querySelector("#Sunday").checked;
+            debugger;
+            // Check if at least one day is selected
+            if (!monday && !tuesday && !wednesday && !thursday && !friday && !saturday && !sunday) {
+                event.preventDefault();
+                alert("At least one day must be selected.");
+                return;
+            }
+             debugger;
+            // Check if any of the required fields are empty
+            if (!name) {
+                event.preventDefault();
+                alert("Name is required.");
+                return;
+            }
+            debugger;
+            if (!description) {
+                event.preventDefault();
+                alert("Description is required.");
+                return;
+            }
+
+            if (!selectedTeacherId) {
+                event.preventDefault();
+                alert("Teacher is required.");
+                return;
+            }
+
+            if (!cost) {
+                event.preventDefault();
+                alert("Cost is required.");
+                return;
+            }
+
+            // Check if Start Date and End Date are valid
+            if (!startDate) {
+                event.preventDefault();
+                alert("Start Date is required.");
+                return;
+            }
+
+            if (!endDate) {
+                event.preventDefault();
+                alert("End Date is required.");
+                return;
+            }
+
+            if (new Date(endDate) <= new Date(startDate)) {
+                event.preventDefault();
+                alert("End Date should be greater than Start Date.");
+                return;
+            }
+
+            // Check if Start Time and End Time are valid
+            var startTime = document.querySelector("#StartTime").value;
+            var endTime = document.querySelector("#EndTime").value;
+
+            if (!startTime) {
+                event.preventDefault();
+                alert("Start Time is required.");
+                return;
+            }
+
+            if (!endTime) {
+                event.preventDefault();
+                alert("End Time is required.");
+                return;
+            }
+        });
+    });
+</script>

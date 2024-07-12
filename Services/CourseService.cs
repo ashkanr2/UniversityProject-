@@ -190,29 +190,28 @@ namespace UniversityProject.Services
             {
                 return "Error: You are already enrolled in this course.";
             }
+
             foreach (var existingCourse in userCourses)
             {
                 if (existingCourse.Days.Intersect(newCourse.Days).Any())
                 {
-                    var newCourseStartTime = newCourse.StartDate.Add(newCourse.StartTime);
-                    var newCourseEndTime = newCourse.EndDate.Add(newCourse.StartTime);
+                    var newCourseStartDateTime = newCourse.StartDate.Date + newCourse.StartTime;
+                    var newCourseEndDateTime = newCourse.EndDate.Date + newCourse.EndTime;
 
-                    var existingCourseStartTime = existingCourse.StartDate.Add(existingCourse.StartTime);
-                    var existingCourseEndTime = existingCourse.EndDate.Add(existingCourse.StartTime);
+                    var existingCourseStartDateTime = existingCourse.StartDate.Date + existingCourse.StartTime;
+                    var existingCourseEndDateTime = existingCourse.EndDate.Date + existingCourse.EndTime;
 
-                    if ((newCourseStartTime < existingCourseEndTime && newCourseEndTime > existingCourseStartTime) ||
-                        (existingCourseStartTime < newCourseEndTime && existingCourseEndTime > newCourseStartTime))
+                    // Check if there is any overlap between new course and existing course times on any day
+                    if ((newCourseStartDateTime < existingCourseEndDateTime && newCourseEndDateTime > existingCourseStartDateTime) ||
+                        (existingCourseStartDateTime < newCourseEndDateTime && existingCourseEndDateTime > newCourseStartDateTime))
                     {
-
-                        return "Error: = Course  times conflict with existing course  =>  "+ (existingCourse.Name).ToString() ;
+                        return "Error: = Course  times conflict with existing course  =>  "+ (existingCourse.Name).ToString();
                     }
                 }
             }
 
             return "Success: User can add this course.";
         }
-
-        
 
     }
 }

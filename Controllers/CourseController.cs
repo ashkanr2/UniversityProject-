@@ -129,10 +129,33 @@ namespace UniversityProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create( AddCourseVm addCourseVM )
         {
+            var courseVM = new AddCourseVm();
+            var user = await _signInManager.UserManager.GetUserAsync(User);
             
+            if (!ModelState.IsValid)
+            {
+                if (user.IssystemAdmin)
+                {
+                    var teachers = await _teacherservice.GetAllAsync();
+                    courseVM.Teachers = teachers.ToList();
+                    ViewBag.TeacherList = new SelectList(courseVM.Teachers, "Id", "Name");
+                    return View(courseVM);
+                }
+                else
+                {
+                    var teacher = await _teacherservice.GetByIdUser(user.Id);
+                    if (teacher!=null)
+                    {
+                        courseVM.Teachers = new List<Teacher> { teacher };
+                        ViewBag.TeacherList = new SelectList(courseVM.Teachers, "Id", "Name");
+                        return View(courseVM);
+                    }
+                }
+                return View(addCourseVM);
+            }
             var course = new Course();
             var teacherId = new Guid();
-            var user = await _signInManager.UserManager.GetUserAsync(User);
+          
             if(user.IssystemAdmin)
             {
                 teacherId=addCourseVM.SelectedTeacherId;

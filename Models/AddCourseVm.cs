@@ -8,15 +8,21 @@ namespace UniversityProject.Models
         [Key]
         public Guid Id { get; set; }
 
+        [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "Please select a teacher")]
         public Guid SelectedTeacherId { get; set; }
+
+        [Required(ErrorMessage = "Cost is required")]
         public decimal Cost { get; set; }
 
         public bool IsActive { get; set; }
-        public List<Teacher> Teachers { get; set; }
-        public IFormFile Image { get; set; }
-
+        public List<Teacher>? Teachers { get; set; }
+        public IFormFile? Image { get; set; }
 
         [Display(Name = "Sunday")]
         public bool Sunday { get; set; }
@@ -40,17 +46,19 @@ namespace UniversityProject.Models
         public bool Saturday { get; set; }
 
         [Display(Name = "StartTime")]
+        [Required(ErrorMessage = "Start time is required")]
         public TimeSpan StartTime { get; set; }
 
-
         [Display(Name = "EndTime")]
+        [Required(ErrorMessage = "End time is required")]
         public TimeSpan EndTime { get; set; }
 
-
         [Display(Name = "Start Date")]
+        [Required(ErrorMessage = "Start date is required")]
         public DateTime StartDate { get; set; }
 
         [Display(Name = "End Date")]
+        [Required(ErrorMessage = "End date is required")]
         public DateTime EndDate { get; set; }
     }
 }

@@ -106,12 +106,12 @@
                                 <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Users</a>
                             </li>
                                 }
-                            @if (isAuthenticated && (currentUser.IssystemAdmin))
+                            @* @if (isAuthenticated && (currentUser.IssystemAdmin))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="CourseTime" asp-action="Index">semester</a>
                                 </li>
-                            }
+                            } *@
                         @*     <li class="nav-item">
                                 <!-- Move the search form outside the list -->
                                 <form asp-controller="Home" asp-action="Search" method="get" >

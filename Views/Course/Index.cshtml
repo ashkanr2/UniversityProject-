@@ -88,25 +88,37 @@
                             <ul>
                                 <li>
                                     <i class="fas fa-graduation-cap "> @item.TeacherName  </i>
+
                                     @if (item.Cost == 0)
                                     {
-                                        <span >Free</span>
+                                        <span>Free</span>
                                     }
                                     else
                                     {
                                         <span class="text-info">@item.Cost</span>
                                     }
                                 </li>
-                                <li class="text-secondary"><i class="far fa-calendar-plus text-secondary"></i> @item.StartDate.ToString("yyyy/MM/dd hh:mm tt")</li>
-                                <li class="text-secondary"><i class="far fa-calendar-plus text-secondary"></i> @item.EndDate.ToString("yyyy/MM/dd hh:mm tt")</li>
+                                <li class="text-secondary"><i class="far fa-calendar-plus text-secondary"></i> @item.StartDate.ToString("yyyy/MM/dd") - @item.EndDate.ToString("yyyy/MM/dd ")</li>
+                                @*                                 <li class="text-secondary"><i class="far fa-calendar-plus text-secondary"></i> @item.EndDate.ToString("yyyy/MM/dd ")</li> *@
                                 <li class="text-warning"><i class="far fa-calendar-plus"></i> @item.StartTime - @item.EndTime</li>
-                                <li>
-                                    @foreach (var day in item.Days)
+                                <li class="far fa-calendar-plus">
+                                    <span>&nbsp;&nbsp;</span>
+                                    @if (item.Days.Count()==7)
                                     {
-                                        <span>@day</span>
-                                        @if (day != item.Days.Last())
+                                        <span>&nbsp;Every Day</span>
+                                    }
+
+                                    @if (item.Days.Count()<7)
+                                    {
+                                        foreach (var day in item.Days)
                                         {
-                                            <span>-</span>
+                                            <span>&nbsp;@day</span>
+
+
+                                            if (day != item.Days.Last())
+                                            {
+                                                <span> - </span>
+                                            }
                                         }
                                     }
                                 </li>
@@ -123,8 +135,8 @@
                                 </form>
                                 @if (item.IsExist)
                                 {
-                                    
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">Add To My Course</button>
+
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Add To My Course</button>
                                 }
                             }
                         </div>
