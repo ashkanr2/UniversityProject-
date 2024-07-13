@@ -46,6 +46,7 @@
                     <div class="col-lg-7 col-md-12 left-item">
                         <ul style="color: white;">
                        
+                          
                                 @if (SignInManager.IsSignedIn(User))
                                 {
                                 <li class="nav-item">
@@ -58,6 +59,8 @@
                                     <a class="dropdown-item" asp-controller="Account" style="color: white;" asp-action="Login" asp-area="">Login</a>
                                 </li>
                                 }
+
+
                   
                         </ul>
 
@@ -82,10 +85,10 @@
         <div id="nav-head" class="header-nav">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3 col-sm-12 nav-img">
-                        <img src="~/assets/images/logo.png" alt="">
+                    @* <div class="col-md-3 col-sm-12 nav-img">
+                        <img src="~/assets/images/allamehlogo.jpg" alt="">
                         <a data-toggle="collapse" data-target="#menu" href="#menu"><i class="fas d-block d-md-none small-menu fa-bars"></i></a>
-                    </div>
+                   </div> *@
                     <div id="menu" class="col-md-9 d-none d-md-block nav-item">
                         <ul>
                             <li class="nav-item">
@@ -111,7 +114,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="CourseTime" asp-action="Index">semester</a>
                                 </li>
-                            } *@
+                            }
                         @*     <li class="nav-item">
                                 <!-- Move the search form outside the list -->
                                 <form asp-controller="Home" asp-action="Search" method="get" >

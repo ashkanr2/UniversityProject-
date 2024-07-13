@@ -62,7 +62,7 @@ namespace UniversityProject.Controllers
            
             foreach (var course in courses)
             {
-
+                int studentNumbr = await _userCourseService.CalculateStudentCount(course.Id);
                 var courseListVM = new CourseListVM
                 {
                     Id = course.Id,
@@ -80,8 +80,9 @@ namespace UniversityProject.Controllers
                     EndTime=course.EndTime,
                     StartDate = course.StartDate,
                     EndDate = course.EndDate,
-                    IsExist= user==null? true : await _userCourseService.CourseIsExistForUser(user.Id,course.Id)
-                    // Add other properties from Course to CourseListVM as needed
+                    IsExist= user==null? true : await _userCourseService.CourseIsExistForUser(user.Id,course.Id),
+                    StudentNumber = studentNumbr,
+                   
                 };
                 courseListVMs.Add(courseListVM);
             }
@@ -280,7 +281,8 @@ namespace UniversityProject.Controllers
                     Image = course.Image,
                     ImageId = course.ImageId,
                     StudentNumber = studentNumbr,
-                    EndTime= course.EndTime
+                    EndTime= course.EndTime,
+                    Days=course.Days
 
                 };
 
