@@ -1,0 +1,255 @@
+﻿@model UniversityProject.Models.AddCourseVm
+
+@{
+    ViewData["Title"] = "Edit Course";
+}
+
+<h2>Edit Course</h2>
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<div class="row">
+    <div class="col-lg-6 col-md-10 m-auto m-b-30">
+        <div>
+            <div class="user-box">
+
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" onchange="true" />
+                        @* <span asp-validation-for="Name" class="text-danger"></span> *@
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Days</label>
+                        <div class="weekDays-selector" onvolumechange="false">
+                            <input asp-for="Monday" type="checkbox" id="weekday-mon" class="weekday" />
+                            <label for="weekday-mon">M</label>
+                            <input asp-for="Tuesday" type="checkbox" id="weekday-tue" class="weekday" />
+                            <label for="weekday-tue">T</label>
+                            <input asp-for="Wednesday" type="checkbox" id="weekday-wed" class="weekday" />
+                            <label for="weekday-wed">W</label>
+                            <input asp-for="Thursday" type="checkbox" id="weekday-thu" class="weekday" />
+                            <label for="weekday-thu">T</label>
+                            <input asp-for="Friday" type="checkbox" id="weekday-fri" class="weekday" />
+                            <label for="weekday-fri">F</label>
+                            <input asp-for="Saturday" type="checkbox" id="weekday-sat" class="weekday" />
+                            <label for="weekday-sat">S</label>
+                            <input asp-for="Sunday" type="checkbox" id="weekday-sun" class="weekday" />
+                            <label for="weekday-sun">S</label>
+                        </div>
+                    </div>
+                    @*  <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                    </div> *@
+
+                    <div class="form-group" onchange="false">
+                        <label asp-for="SelectedTeacherId" class="control-label">Teacher</label>
+                        <select class="form-control" asp-for="SelectedTeacherId" asp-items="Model.Teachers.Select(t => new SelectListItem(t.Name, t.Id.ToString()))">
+                        </select>
+                        <span asp-validation-for="SelectedTeacherId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="sr-only control-label" for="confirm_password">Description</label>
+                        <div class="input-group round">
+                            <span class="input-group-addon">
+                                <i class="icon-key"></i>
+                            </span>
+                            <input type="text" asp-for="Description" class="form-control round ltr text-left" id="Description" placeholder="Description">
+                        </div><!-- /.input-group-->
+                    </div><!-- /.form-group -->
+                    <div class="form-group" onchange="false">
+                        <label asp-for="StartDate" class="control-label">Start Date</label>
+                        <input asp-for="StartDate" class="form-control" type="date" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" onchange="false">
+                        <label asp-for="EndDate" class="control-label">End Date</label>
+                        <input asp-for="EndDate" class="form-control" type="date" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" onchange="false">
+                        <label asp-for="StartTime" class="control-label">StartTime</label>
+                        <input asp-for="StartTime" class="form-control" type="time" required />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" onchange="false">
+                        <label asp-for="EndTime" class="control-label">EndTime</label>
+                        <input asp-for="EndTime" class="form-control" type="time" required />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Cost" class="control-label"></label>
+                        <input asp-for="Cost" class="form-control" />
+                        <span asp-validation-for="Cost" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="sr-only control-label" for="image"></label>
+                        <div class="input-group round">
+                            <span class="input-group-addon">
+                                <i class="icon-picture"></i>
+                            </span>
+                            <input type="file" asp-for="Image" id="image" name="image">
+                        </div><!-- /.input-group-->
+                    </div><!-- /.form-group -->
+                    @*                      <div class="form-group">
+                    <label asp-for="IsActive" class="control-label"></label>
+                    <input asp-for="IsActive" class="control-label" />
+                    <span asp-validation-for="IsActive" class="text-danger"></span>
+                    </div> *@
+
+                    <br />
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .weekDays-selector input {
+        display: none !important;
+    }
+
+        .weekDays-selector input[type=checkbox] + label {
+            display: inline-block;
+            border-radius: 6px;
+            background: #dddddd;
+            height: 40px;
+            width: 30px;
+            margin-right: 3px;
+            line-height: 40px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .weekDays-selector input[type=checkbox]:checked + label {
+            background: #2AD705;
+            color: #ffffff;
+        }
+
+    label {
+        display: block;
+        font: 1rem 'Fira Sans', sans-serif;
+    }
+
+    input[type=time], input[type=date] {
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .form-control[type=checkbox] {
+        width: auto;
+        margin-top: 5px;
+    }
+</style>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.querySelector("form");
+        form.addEventListener("submit", function (event) {
+            var startDate = document.querySelector("#StartDate").value;
+            var endDate = document.querySelector("#EndDate").value;
+            var name = document.querySelector("#Name").value;
+            var selectedTeacherId = document.querySelector("#SelectedTeacherId").value;
+            var description = document.querySelector("#Description").value;
+            var cost = document.querySelector("#Cost").value;
+
+            var monday = document.querySelector("#Monday").checked;
+            var tuesday = document.querySelector("#Tuesday").checked;
+            var wednesday = document.querySelector("#Wednesday").checked;
+            var thursday = document.querySelector("#Thursday").checked;
+            var friday = document.querySelector("#Friday").checked;
+            var saturday = document.querySelector("#Saturday").checked;
+            var sunday = document.querySelector("#Sunday").checked;
+            debugger;
+            // Check if at least one day is selected
+            if (!monday && !tuesday && !wednesday && !thursday && !friday && !saturday && !sunday) {
+                event.preventDefault();
+                alert("At least one day must be selected.");
+                return;
+            }
+            debugger;
+            // Check if any of the required fields are empty
+            if (!name) {
+                event.preventDefault();
+                alert("Name is required.");
+                return;
+            }
+            debugger;
+            if (!description) {
+                event.preventDefault();
+                alert("Description is required.");
+                return;
+            }
+
+            if (!selectedTeacherId) {
+                event.preventDefault();
+                alert("Teacher is required.");
+                return;
+            }
+
+            if (!cost) {
+                event.preventDefault();
+                alert("Cost is required.");
+                return;
+            }
+
+            // Check if Start Date and End Date are valid
+            if (!startDate) {
+                event.preventDefault();
+                alert("Start Date is required.");
+                return;
+            }
+
+            if (!endDate) {
+                event.preventDefault();
+                alert("End Date is required.");
+                return;
+            }
+
+            if (new Date(endDate) <= new Date(startDate)) {
+                event.preventDefault();
+                alert("End Date should be greater than Start Date.");
+                return;
+            }
+
+            // Check if Start Time and End Time are valid
+            var startTime = document.querySelector("#StartTime").value;
+            var endTime = document.querySelector("#EndTime").value;
+
+            if (!startTime) {
+                event.preventDefault();
+                alert("Start Time is required.");
+                return;
+            }
+
+            if (!endTime) {
+                event.preventDefault();
+                alert("End Time is required.");
+                return;
+            }
+        });
+    });
+</script>

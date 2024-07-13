@@ -23,7 +23,7 @@ namespace UniversityProject.Controllers
             ICourseService courseService,
             UserManager<User> userManager,
             ICourseService lessonService,
-            ITeacherService teacherservic, 
+            ITeacherService teacherservic,
             SignInManager<User> signInManager,
             IUserCourseService userCourseService)
         {
@@ -33,10 +33,10 @@ namespace UniversityProject.Controllers
             _userManager = userManager;
             _courseService=courseService;
             _userCourseService = userCourseService;
-            _imageService=imageService; 
+            _imageService=imageService;
         }
 
-        public async Task<IActionResult> Index(string query=null)
+        public async Task<IActionResult> Index(string query = null)
         {
             IEnumerable<Course> courses = null;
             var courseListVMs = new List<CourseListVM>();
@@ -47,19 +47,19 @@ namespace UniversityProject.Controllers
                 ViewBag.ErrorMessagequery =null;
                 ViewBag.ErrorMessagequery = "Search query must be at least 3 characters long.";
             }
-            if (query != null && query.Length>=3) 
+            if (query != null && query.Length>=3)
             {
                 courses = (await _courseService.SearchCourses(query)).OrderByDescending(c => c.CreatedOn).ToList();
                 ViewBag.ErrorMessage = "Search Courses  Like "+query;
 
             }
-           
+
             if (courses == null)
             {
-                courses = (await _courseService.GetAllAsync()).OrderByDescending(c=>c.CreatedOn).ToList();
-               
+                courses = (await _courseService.GetAllAsync()).OrderByDescending(c => c.CreatedOn).ToList();
+
             }
-           
+
             foreach (var course in courses)
             {
                 int studentNumbr = await _userCourseService.CalculateStudentCount(course.Id);
@@ -80,9 +80,9 @@ namespace UniversityProject.Controllers
                     EndTime=course.EndTime,
                     StartDate = course.StartDate,
                     EndDate = course.EndDate,
-                    IsExist= user==null? true : await _userCourseService.CourseIsExistForUser(user.Id,course.Id),
+                    IsExist= user==null ? true : await _userCourseService.CourseIsExistForUser(user.Id, course.Id),
                     StudentNumber = studentNumbr,
-                   
+
                 };
                 courseListVMs.Add(courseListVM);
             }
@@ -116,7 +116,7 @@ namespace UniversityProject.Controllers
                 var teacher = await _teacherservice.GetByIdUser(user.Id);
                 if (teacher!=null)
                 {
-                    courseVM.Teachers = new List<Teacher> { teacher};
+                    courseVM.Teachers = new List<Teacher> { teacher };
                     ViewBag.TeacherList = new SelectList(courseVM.Teachers, "Id", "Name");
                     return View(courseVM);
                 }
@@ -128,11 +128,11 @@ namespace UniversityProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( AddCourseVm addCourseVM )
+        public async Task<IActionResult> Create(AddCourseVm addCourseVM)
         {
             var courseVM = new AddCourseVm();
             var user = await _signInManager.UserManager.GetUserAsync(User);
-            
+
             if (!ModelState.IsValid)
             {
                 if (user.IssystemAdmin)
@@ -156,8 +156,8 @@ namespace UniversityProject.Controllers
             }
             var course = new Course();
             var teacherId = new Guid();
-          
-            if(user.IssystemAdmin)
+
+            if (user.IssystemAdmin)
             {
                 teacherId=addCourseVM.SelectedTeacherId;
             }
@@ -165,11 +165,11 @@ namespace UniversityProject.Controllers
             {
                 teacherId = (await _teacherservice.GetByIdUser(user.Id)).Id;
             }
-            if((addCourseVM.Image != null && addCourseVM.Image.Length > 0))
+            if ((addCourseVM.Image != null && addCourseVM.Image.Length > 0))
             {
                 int imageType = 1;
                 var imageTypeId = await _imageService.GetImageType(imageType);
-                var result = await _imageService.AddAsync(addCourseVM.Image , imageTypeId);
+                var result = await _imageService.AddAsync(addCourseVM.Image, imageTypeId);
                 if (result.Isvalid)
                 {
                     course.ImageId= result.resultId;
@@ -184,7 +184,7 @@ namespace UniversityProject.Controllers
             if (addCourseVM.Friday) selectedDays.Add(DayOfWeek.Friday);
             if (addCourseVM.Saturday) selectedDays.Add(DayOfWeek.Saturday);
 
- 
+
             course.Days=selectedDays;
             course.StartTime=addCourseVM.StartTime;
             course.EndDate=addCourseVM.EndDate;
@@ -194,7 +194,7 @@ namespace UniversityProject.Controllers
             course.TeacherId=teacherId;
             course.IsActive=addCourseVM.IsActive;
             course.Description=addCourseVM.Description;
-            course.EndTime=addCourseVM.EndTime; 
+            course.EndTime=addCourseVM.EndTime;
             await _courseService.AddAsync(course);
             return RedirectToAction(nameof(Index));
 
@@ -202,30 +202,99 @@ namespace UniversityProject.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var lesson = await _courseService.GetByIdAsync(id);
-            if (lesson == null)
+           
+            var course = await _courseService.GetByIdAsync(id);
+            if (course == null)
             {
                 return NotFound();
             }
-            return View(lesson);
+
+
+            
+
+            // Map Course entity to AddCourseVm
+            var addCourseVm = new AddCourseVm
+            {
+                Id = course.Id,
+                Name = course.Name,
+                Description = course.Description,
+                SelectedTeacherId = course.TeacherId,
+                Cost = course.Cost,
+                IsActive = course.IsActive,
+                StartDate = course.StartDate,
+                EndDate = course.EndDate,
+                StartTime = course.StartTime,
+                EndTime = course.EndTime,
+                Sunday = course.Days.Contains(DayOfWeek.Sunday),
+                Monday = course.Days.Contains(DayOfWeek.Monday),
+                Tuesday = course.Days.Contains(DayOfWeek.Tuesday),
+                Wednesday = course.Days.Contains(DayOfWeek.Wednesday),
+                Thursday = course.Days.Contains(DayOfWeek.Thursday),
+                Friday = course.Days.Contains(DayOfWeek.Friday),
+                Saturday = course.Days.Contains(DayOfWeek.Saturday),
+                //Teachers = await _teacherService.GetAllTeachersAsync() // Assuming you have a method to get all teachers
+            };
+            var teacher = await _teacherservice.GetByIdAsync(course.TeacherId);
+            if (teacher!=null)
+            {
+                addCourseVm.Teachers = new List<Teacher> { teacher };
+                ViewBag.TeacherList = new SelectList(addCourseVm.Teachers, "Id", "Name");
+                return View(addCourseVm);
+            }
+            return View(addCourseVm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,IsDeleted,IsActive,CreatedOn")] Course lesson)
+        public async Task<IActionResult> Edit(Guid id, AddCourseVm addCourseVm)
         {
-            if (id != lesson.Id)
+            if (id != addCourseVm.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            // Map AddCourseVm to Course entity
+            var course = await _courseService.GetByIdAsync(id);
+            if (course == null)
             {
-                await _courseService.UpdateAsync(lesson);
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            return View(lesson);
+
+            course.Name = addCourseVm.Name;
+            course.Description = addCourseVm.Description;
+            course.TeacherId = addCourseVm.SelectedTeacherId;
+            course.Cost = addCourseVm.Cost;
+            course.IsActive = addCourseVm.IsActive;
+            course.StartDate = addCourseVm.StartDate;
+            course.EndDate = addCourseVm.EndDate;
+            course.StartTime = addCourseVm.StartTime;
+            course.EndTime = addCourseVm.EndTime;
+
+            course.Days = new List<DayOfWeek>();
+            if (addCourseVm.Sunday) course.Days.Add(DayOfWeek.Sunday);
+            if (addCourseVm.Monday) course.Days.Add(DayOfWeek.Monday);
+            if (addCourseVm.Tuesday) course.Days.Add(DayOfWeek.Tuesday);
+            if (addCourseVm.Wednesday) course.Days.Add(DayOfWeek.Wednesday);
+            if (addCourseVm.Thursday) course.Days.Add(DayOfWeek.Thursday);
+            if (addCourseVm.Friday) course.Days.Add(DayOfWeek.Friday);
+            if (addCourseVm.Saturday) course.Days.Add(DayOfWeek.Saturday);
+
+            if (addCourseVm.Image != null && addCourseVm.Image.Length > 0)
+            {
+                int imageType = 1; // Assuming a specific image type
+                var imageTypeId = await _imageService.GetImageType(imageType);
+                var result = await _imageService.AddAsync(addCourseVm.Image, imageTypeId);
+                if (result.Isvalid)
+                {
+                    course.ImageId = result.resultId;
+                }
+            }
+
+            await _courseService.UpdateAsync(course);
+            return RedirectToAction(nameof(Index));
         }
+
+
 
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -254,7 +323,7 @@ namespace UniversityProject.Controllers
             if (user.IsTeacher)
             {
                 var teacher = await _teacherservice.GetByIdUser(user.Id);
-                 courses = await _courseService.GetAllByTeacherId(teacher.Id);
+                courses = await _courseService.GetAllByTeacherId(teacher.Id);
                 if (courses.Count()==0) { ModelState.AddModelError(string.Empty, "You Dont Have any Course"); }
 
             }
